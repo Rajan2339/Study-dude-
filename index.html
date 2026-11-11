@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+      <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -13,6 +13,11 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
+  <!-- In-browser Parsers: PDF.js, Mammoth.js (Word), JSZip (PowerPoint) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
   <style>
     :root {
       --bg: #F9F8F6;
@@ -25,7 +30,7 @@
       --text-muted: #6B685F;
       --text-faint: #A09D94;
 
-      --accent: #2E4034; /* Deep Forest/Botanical */
+      --accent: #2E4034; /* Deep Forest / Botanical */
       --accent-hover: #1F2D24;
       --accent-soft: #EAEFEA;
       --accent-subtle: #DDE5DC;
@@ -272,6 +277,9 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      height: 100vh;
+      position: sticky;
+      top: 0;
     }
 
     .user-badge {
@@ -404,8 +412,7 @@
       background: var(--bg);
     }
 
-    .empty-state i {
-      stroke-width: 1.5;
+    .empty-state i, .empty-state svg {
       color: var(--text-faint);
       margin-bottom: 14px;
     }
@@ -496,7 +503,7 @@
       border: 1px solid var(--border);
     }
 
-    .topic-item.completed {
+    .topic-item.completed span {
       text-decoration: line-through;
       color: var(--text-faint);
       opacity: 0.75;
@@ -538,20 +545,28 @@
       to { transform: translateY(0); opacity: 1; }
     }
 
-    /* Summarizer & Flashcards Layout */
-    .summary-section {
-      background: var(--surface);
-      border: 1px solid var(--border);
+    /* File Drag & Drop Zone */
+    .drop-zone {
+      border: 2px dashed var(--border-strong);
       border-radius: var(--radius-md);
-      padding: 20px;
-      margin-top: 18px;
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      background: var(--surface-subtle);
+      transition: all 0.2s ease;
+      margin-bottom: 18px;
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
     }
 
+    /* Flashcard 3D Perspective Card */
     .flashcard {
       background: var(--surface-subtle);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      padding: 28px 24px;
+      padding: 24px;
       cursor: pointer;
       perspective: 1000px;
       min-height: 170px;
@@ -560,19 +575,39 @@
       justify-content: center;
       text-align: center;
       transition: transform 0.2s ease, border-color 0.2s ease;
+      position: relative;
     }
-
     .flashcard:hover {
       border-color: var(--border-strong);
       transform: translateY(-2px);
     }
-
-    .flashcard-indicator {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-faint);
-      margin-bottom: 8px;
+    .flashcard-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .flashcard.flipped .flashcard-inner {
+      transform: rotateY(180deg);
+    }
+    .card-face {
+      width: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-face.back {
+      position: absolute;
+      transform: rotateY(180deg);
+      color: var(--accent);
+      font-weight: 500;
     }
 
     /* Pomodoro Timer */
@@ -620,7 +655,7 @@
       </form>
     </div>
 
-    <!-- Onboarding: Details for first time or profile update -->
+    <!-- Onboarding: Profile configuration -->
     <div class="auth-card hidden" id="auth-step-profile">
       <div class="auth-brand">
         <div class="brand-mark">K</div>
@@ -653,7 +688,7 @@
               <option value="Grade 9">Grade 9</option>
               <option value="Grade 10 - Matric / Secondary">Grade 10 (Secondary / Board)</option>
               <option value="Grade 11">Grade 11 (Higher Secondary - Year 1)</option>
-              <option value="Grade 12 - Senior Secondary">Grade 12 (Senior Secondary - Finals)</option>
+              <option value="Grade 12 - Senior Secondary" selected>Grade 12 (Senior Secondary - Finals)</option>
             </select>
           </div>
         </div>
@@ -678,7 +713,7 @@
   <!-- STEP 3: MAIN AUTHENTICATED WORKSPACE -->
   <div id="app-workspace" class="hidden">
     
-    <!-- Collapsible/Clean Sidebar -->
+    <!-- Sidebar Navigation -->
     <aside class="sidebar">
       <div>
         <div class="user-badge">
@@ -715,7 +750,7 @@
       </div>
     </aside>
 
-    <!-- Main Workspace Content Panels -->
+    <!-- Main Content Viewport -->
     <main class="main-viewport">
       
       <!-- TAB: DASHBOARD -->
@@ -734,9 +769,9 @@
 
         <div class="grid-2" style="margin-bottom: 24px;">
           <div class="card" style="margin-bottom: 0;">
-                        <span class="mono" style="color: var(--text-faint); text-transform: uppercase;">Upcoming Target</span>
+            <span class="mono" style="color: var(--text-faint); text-transform: uppercase;">Upcoming Exam Target</span>
             <div id="dash-nearest-exam" style="margin-top: 8px;">
-              <span style="font-size: 1.1rem; color: var(--text-muted);">No exams registered yet.</span>
+              <span style="font-size: 1.1rem; color: var(--text-muted);">No exams scheduled yet.</span>
             </div>
           </div>
           <div class="card" style="margin-bottom: 0;">
@@ -750,61 +785,71 @@
 
         <div class="card">
           <div class="card-title">
-            <h2 style="font-size: 1.4rem;">Current Subjects</h2>
+            <h2>Current Subjects</h2>
             <span class="mono" id="subject-count-tag" style="font-size: 0.8rem; color: var(--text-muted);">0 active</span>
           </div>
 
           <div id="subject-list-container">
-            <!-- Dynamically injected or empty slate -->
+            <!-- Dynamically populated -->
           </div>
         </div>
       </section>
 
-      <!-- TAB: EXAM PLANNER & SYLLABUS -->
+      <!-- TAB: EXAM PLANNER & VELOCITY -->
       <section id="tab-planner" class="hidden">
         <header class="page-header">
           <div class="header-title">
-            <h1>Exam Deadlines & Pacing</h1>
+            <h1>Exam Deadlines & Pacing Velocity</h1>
             <p>Deterministic calculations based on your days remaining and unstudied topics.</p>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="openSubjectModal()">
+          <button class="btn btn-secondary btn-sm" onclick="openSubjectModal()">
             <i data-lucide="plus" style="width: 15px; height: 15px;"></i> New Exam Track
           </button>
         </header>
 
         <div id="planner-subject-cards">
-          <!-- Rendered subject cards with line-by-line topic pacing -->
+          <!-- Rendered subject pacing cards -->
         </div>
       </section>
 
-      <!-- TAB: NOTE SYNTHESIZER & STUDY MATERIAL -->
+      <!-- TAB: UNIVERSAL NOTE SYNTHESIZER & MULTI-FORMAT FILE PARSER -->
       <section id="tab-summarizer" class="hidden">
         <header class="page-header">
           <div class="header-title">
             <h1>Study Material Synthesizer</h1>
-            <p>Distill dense reference papers, textbook chapters, or lecture notes into high-retention artifacts.</p>
+            <p>Upload lecture PDFs, PowerPoint slides (.pptx), Word documents (.docx), text files, or paste raw notes to extract high-yield insights and interactive active-recall cards.</p>
           </div>
         </header>
 
         <div class="card">
+          <!-- Multi-format Drag & Drop Upload Zone -->
+          <div class="drop-zone" id="file-drop-zone" onclick="document.getElementById('file-uploader').click()">
+            <i data-lucide="file-up" style="width: 32px; height: 32px; color: var(--accent); margin-bottom: 8px;"></i>
+            <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Click or Drag & Drop Study File Here</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Supports <strong>PDF (.pdf)</strong>, <strong>PowerPoint (.pptx)</strong>, <strong>Word (.docx)</strong>, <strong>Markdown (.md)</strong> & <strong>Text (.txt)</strong>
+            </p>
+            <input type="file" id="file-uploader" accept=".pdf,.docx,.pptx,.txt,.md" style="display: none;" onchange="handleUniversalFileUpload(event)">
+          </div>
+
+          <div id="file-load-status" class="hidden" style="margin-bottom: 16px; padding: 10px 14px; background: var(--accent-soft); border-radius: var(--radius-sm); font-size: 0.85rem; color: var(--accent); display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="loader" style="width: 16px; height: 16px;"></i>
+            <span id="file-load-text">Processing document...</span>
+          </div>
+
           <div class="form-group">
             <label>Document Title or Subject Topic</label>
-            <input type="text" id="summary-doc-title" class="input-field" placeholder="e.g. Photosynthesis: Light-Dependent Reactions" />
+            <input type="text" id="summary-doc-title" class="input-field" placeholder="e.g. Molecular Genetics & Transcription" />
           </div>
 
           <div class="form-group">
-            <label>Paste Lecture Notes or Study Material</label>
-            <textarea id="summary-raw-text" class="input-field" rows="8" placeholder="Paste textbook paragraphs, raw transcriptions, or study notes here..."></textarea>
+            <label>Extracted or Pasted Material</label>
+            <textarea id="summary-raw-text" class="input-field" rows="8" placeholder="Extracted textbook content or pasted notes will appear here..."></textarea>
           </div>
 
-          <div style="display: flex; gap: 10px; align-items: center; justify-content: space-between;">
-            <div>
-              <label class="btn btn-secondary btn-sm" style="cursor: pointer;">
-                <i data-lucide="file-up" style="width: 15px; height: 15px;"></i> Upload .txt File
-                <input type="file" id="file-uploader" accept=".txt,.md" style="display: none;" onchange="handleFileUpload(event)">
-              </label>
-            </div>
-            <button class="btn btn-primary" onclick="synthesizeNotes()">
+          <div class="action-row">
+            <button class="btn btn-secondary btn-sm" onclick="clearSynthesizer()">Clear</button>
+            <button class="btn btn-primary" onclick="synthesizeNotes()" style="width: auto;">
               <i data-lucide="sparkles" style="width: 16px; height: 16px;"></i> Synthesize Key Insights
             </button>
           </div>
@@ -812,18 +857,28 @@
 
         <div id="summary-results-pane" class="hidden">
           <div class="card">
-            <h2 class="serif-heading" style="font-size: 1.6rem; margin-bottom: 8px;" id="out-doc-title">Document Summary</h2>
-            <div id="out-exec-summary" style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 20px;"></div>
-
-            <h3 style="font-size: 1.15rem; margin-bottom: 12px;">High-Yield Concept Takeaways</h3>
-            <ul id="out-bullet-points" style="padding-left: 20px; line-height: 1.7; font-size: 0.92rem; color: var(--text-main); margin-bottom: 28px;">
-            </ul>
-
-            <h3 style="font-size: 1.15rem; margin-bottom: 12px;">Active Recall Flashcards</h3>
-            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">Click any card to flip between Prompt and Key Fact.</p>
-            <div id="out-flashcards-grid" class="grid-2">
-              <!-- Rendered dynamic flashcards -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+              <div>
+                <h2 class="serif-heading" style="font-size: 1.8rem;" id="out-doc-title">Document Summary</h2>
+                <span class="mono" id="out-reading-stats" style="font-size: 0.78rem; color: var(--text-muted);">Extracted text · High retention digest</span>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="exportSummaryAsText()">
+                <i data-lucide="download" style="width: 14px; height: 14px;"></i> Export Notes (.txt)
+              </button>
             </div>
+
+            <div id="out-exec-summary" style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 24px; padding: 14px; background: var(--surface-subtle); border-radius: var(--radius-sm); border-left: 3px solid var(--accent);"></div>
+
+            <h3 style="font-size: 1.25rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="check-circle" style="width: 18px; height: 18px; color: var(--accent);"></i> High-Yield Concept Takeaways
+            </h3>
+            <ul id="out-bullet-points" style="padding-left: 20px; line-height: 1.7; font-size: 0.92rem; color: var(--text-main); margin-bottom: 28px;"></ul>
+
+            <h3 style="font-size: 1.25rem; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="layers" style="width: 18px; height: 18px; color: var(--accent);"></i> Active Recall Flashcards
+            </h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 16px;">Click any card to flip between Prompt and Key Fact.</p>
+            <div id="out-flashcards-grid" class="grid-2"></div>
           </div>
         </div>
       </section>
@@ -839,7 +894,7 @@
 
         <div class="grid-2">
           <div class="card" style="text-align: center;">
-            <div class="pill-selector" style="max-width: 280px; margin: 0 auto 16px;">
+            <div class="pill-selector" style="max-width: 300px; margin: 0 auto 16px;">
               <button class="pill-btn active" id="timer-mode-deep" onclick="setTimerMode(25)">25m Deep Work</button>
               <button class="pill-btn" id="timer-mode-long" onclick="setTimerMode(50)">50m Intensive</button>
               <button class="pill-btn" id="timer-mode-rest" onclick="setTimerMode(5)">5m Rest</button>
@@ -848,7 +903,7 @@
             <div class="timer-display" id="timer-display">25:00</div>
 
             <div style="display: flex; gap: 10px; justify-content: center;">
-              <button class="btn btn-primary" id="timer-toggle-btn" onclick="toggleTimer()">Start Session</button>
+              <button class="btn btn-primary" id="timer-toggle-btn" onclick="toggleTimer()" style="width: auto;">Start Session</button>
               <button class="btn btn-secondary" onclick="resetTimer()">Reset</button>
             </div>
           </div>
@@ -858,9 +913,7 @@
             <div class="form-group">
               <input type="text" id="focus-task-input" class="input-field" placeholder="What single concept are you conquering right now?" onkeydown="if(event.key==='Enter') addFocusTask()" />
             </div>
-            <ul id="focus-task-list" class="topic-checklist" style="max-height: 180px;">
-              <!-- Local rapid list -->
-            </ul>
+            <ul id="focus-task-list" class="topic-checklist" style="max-height: 190px;"></ul>
           </div>
         </div>
       </section>
@@ -891,7 +944,7 @@
 
         <div class="form-group">
           <label>Syllabus Chapters / Topics (One per line)</label>
-          <textarea id="sub-chapters" class="input-field" rows="5" placeholder="Chapter 1: Reaction Mechanisms&#10;Chapter 2: Alkene Reactions&#10;Chapter 3: Stereochemistry&#10;Chapter 4: Aromaticity" required></textarea>
+          <textarea id="sub-chapters" class="input-field" rows="6" placeholder="Chapter 1: Reaction Mechanisms&#10;Chapter 2: Alkene Reactions&#10;Chapter 3: Stereochemistry&#10;Chapter 4: Aromaticity" required></textarea>
         </div>
 
         <div class="action-row" style="margin-top: 24px;">
@@ -902,12 +955,12 @@
     </div>
   </div>
 
-  <!-- SCRIPT ENGINE -->
+  <!-- LOGIC & APPLICATION STATE -->
   <script>
-    // System State Keys
-    const STORAGE_KEY_AUTH = 'studydude_auth_session';
-    const STORAGE_KEY_DATA = 'studydude_academic_db';
-    const STORAGE_KEY_THEME = 'studydude_theme';
+    // State keys
+    const STORAGE_KEY_AUTH = 'kallio_auth_session';
+    const STORAGE_KEY_DATA = 'kallio_academic_db';
+    const STORAGE_KEY_THEME = 'kallio_theme';
 
     let currentSession = null;
     let studentDB = {
@@ -926,15 +979,14 @@
     window.addEventListener('DOMContentLoaded', () => {
       initTheme();
       initSession();
-      lucide.createIcons();
+      initDragAndDrop();
+      if (window.lucide) lucide.createIcons();
     });
 
     // Theme initialization
     function initTheme() {
       const savedTheme = localStorage.getItem(STORAGE_KEY_THEME) || 'light';
-      if (savedTheme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-      }
+      document.documentElement.setAttribute('data-theme', savedTheme);
     }
 
     function toggleTheme() {
@@ -942,10 +994,10 @@
       const target = current === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', target);
       localStorage.setItem(STORAGE_KEY_THEME, target);
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
     }
 
-    // Session Initialization: checks if already signed in
+    // Session Management
     function initSession() {
       const session = localStorage.getItem(STORAGE_KEY_AUTH);
       if (session) {
@@ -975,11 +1027,9 @@
       localStorage.setItem(`${STORAGE_KEY_DATA}_${currentSession.username}`, JSON.stringify(studentDB));
     }
 
-    // Auth Flows
     function showAuthStage(stage) {
       document.getElementById('auth-view').classList.remove('hidden');
       document.getElementById('app-workspace').classList.add('hidden');
-      
       if (stage === 'login') {
         document.getElementById('auth-step-login').classList.remove('hidden');
         document.getElementById('auth-step-profile').classList.add('hidden');
@@ -987,13 +1037,13 @@
         document.getElementById('auth-step-login').classList.add('hidden');
         document.getElementById('auth-step-profile').classList.remove('hidden');
       }
+      if (window.lucide) lucide.createIcons();
     }
 
     function handleLoginSubmit(e) {
       e.preventDefault();
       const username = document.getElementById('login-username').value.trim();
       const pin = document.getElementById('login-pin').value.trim();
-
       if (!username || !pin) return;
 
       currentSession = { username };
@@ -1026,28 +1076,22 @@
     function handleProfileSubmit(e) {
       e.preventDefault();
       const fullName = document.getElementById('prof-fullname').value.trim();
-      
       let academicTag = '';
       if (institutionType === 'school') {
         academicTag = document.getElementById('prof-standard').value;
       } else {
-        const course = document.getElementById('prof-course').value.trim() || 'College Degree';
+        const course = document.getElementById('prof-course').value.trim() || 'Degree Course';
         const sem = document.getElementById('prof-sem').value.trim() || 'Active Term';
         academicTag = `${course} · ${sem}`;
       }
 
-      studentDB.profile = {
-        name: fullName,
-        instType: institutionType,
-        tag: academicTag
-      };
-
+      studentDB.profile = { name: fullName, instType: institutionType, tag: academicTag };
       persistUserData();
       renderWorkspace();
     }
 
     function handleLogout() {
-      if (confirm('Are you sure you want to sign out from this device?')) {
+      if (confirm('Terminate and exit current session?')) {
         localStorage.removeItem(STORAGE_KEY_AUTH);
         currentSession = null;
         document.getElementById('form-login').reset();
@@ -1055,22 +1099,21 @@
       }
     }
 
-    // Workspace Rendering
+    // Workspace Navigation
     function renderWorkspace() {
       document.getElementById('auth-view').classList.add('hidden');
       document.getElementById('app-workspace').classList.remove('hidden');
 
-      // Update Nav profile
-      const prof = studentDB.profile || { name: 'Student', tag: 'Academic Plan' };
+      const prof = studentDB.profile || { name: 'Student', tag: 'Academic Track' };
       document.getElementById('nav-fullname').textContent = prof.name;
       document.getElementById('nav-inst-details').textContent = prof.tag;
       document.getElementById('nav-avatar').textContent = prof.name.charAt(0).toUpperCase();
-      document.getElementById('dash-greeting').textContent = `Greetings, ${prof.name.split(' ')[0]}`;
+      document.getElementById('dash-greeting').textContent = `Welcome, ${prof.name.split(' ')[0]}`;
 
       renderSubjectsList();
       renderPlannerList();
       renderFocusTasks();
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
     }
 
     function switchTab(tabId) {
@@ -1080,11 +1123,13 @@
       document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
 
       document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-      event.currentTarget.classList.add('active');
-      lucide.createIcons();
+      if (event && event.currentTarget) {
+        event.currentTarget.classList.add('active');
+      }
+      if (window.lucide) lucide.createIcons();
     }
 
-    // Pacing and Calculation Algorithms
+    // Exam Pacing Math
     function computePace(examDateStr, topics) {
       const today = new Date();
       today.setHours(0,0,0,0);
@@ -1104,14 +1149,14 @@
 
       if (daysLeft < 0) {
         status = 'idle';
-        statusText = 'Exam Concluded';
+        statusText = 'Concluded';
       } else if (daysLeft === 0) {
         dailyRate = pending;
         status = 'urgent';
         statusText = 'Exam Today!';
       } else if (pending === 0 && total > 0) {
         status = 'ready';
-        statusText = 'Fully Prepared';
+        statusText = 'Prepared';
       } else {
         dailyRate = (pending / daysLeft).toFixed(1);
         if (daysLeft <= 7 && pending > 3) {
@@ -1123,11 +1168,10 @@
       }
 
       const percent = total === 0 ? 0 : Math.round((done / total) * 100);
-
       return { daysLeft, total, done, pending, dailyRate, status, statusText, percent };
     }
 
-    // Subject Rendering
+    // Subject & Planner Rendering
     function renderSubjectsList() {
       const container = document.getElementById('subject-list-container');
       const countTag = document.getElementById('subject-count-tag');
@@ -1144,7 +1188,7 @@
             <i data-lucide="book-open" style="width: 32px; height: 32px;"></i>
             <h3>No Academic Subjects Yet</h3>
             <p>Add your first subject along with its exam date and syllabus to initialize your pacing calendar.</p>
-            <button class="btn btn-primary btn-sm" onclick="openSubjectModal()">
+            <button class="btn btn-secondary btn-sm" onclick="openSubjectModal()">
               <i data-lucide="plus" style="width: 14px; height: 14px;"></i> Register First Subject
             </button>
           </div>
@@ -1155,7 +1199,6 @@
         return;
       }
 
-      // Calculations for overview stats
       let totalChapters = 0;
       let completedChapters = 0;
       let nearestExam = null;
@@ -1179,7 +1222,7 @@
             <div>
               <h3 style="font-size: 1.25rem; font-weight: 600;">${escapeHtml(sub.name)}</h3>
               <span class="mono" style="font-size: 0.78rem; color: var(--text-muted);">
-                Exam: ${sub.examDate} · ${pace.daysLeft >= 0 ? `${pace.daysLeft} days remaining` : 'Finished'}
+                Exam: ${sub.examDate} · ${pace.daysLeft >= 0 ? `${pace.daysLeft} days remaining` : 'Concluded'}
               </span>
             </div>
             <span class="badge badge-${pace.status}">${pace.statusText}</span>
@@ -1205,7 +1248,6 @@
         container.appendChild(card);
       });
 
-      // Update global metrics
       const globalPct = totalChapters === 0 ? 0 : Math.round((completedChapters / totalChapters) * 100);
       globalPctTag.textContent = `${globalPct}%`;
       globalSubtext.textContent = `${completedChapters} of ${totalChapters} syllabus topics cleared`;
@@ -1228,49 +1270,53 @@
 
       if (subjects.length === 0) {
         container.innerHTML = `
-          <div class="empty-state">
-            <i data-lucide="calendar-x" style="width: 32px; height: 32px;"></i>
-            <h3>No Exam Schedules Active</h3>
-            <p>Set an exam date to receive calculated daily velocity quotas.</p>
+          <div class="card" style="text-align: center; padding: 40px 20px;">
+            <p style="color: var(--text-muted); margin-bottom: 12px;">No active exam syllabi to plan.</p>
+            <button class="btn btn-secondary btn-sm" onclick="openSubjectModal()">
+              <i data-lucide="plus" style="width: 14px; height: 14px;"></i> Register Exam Syllabus
+            </button>
           </div>
         `;
         return;
       }
 
       container.innerHTML = '';
-      subjects.forEach((sub, idx) => {
+      subjects.forEach((sub, sIdx) => {
         const pace = computePace(sub.examDate, sub.topics);
         const card = document.createElement('div');
         card.className = 'card';
+        card.style.marginBottom = '20px';
+
         card.innerHTML = `
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
             <div>
-              <h2 style="font-size: 1.35rem;">${escapeHtml(sub.name)}</h2>
-              <p class="mono" style="font-size: 0.82rem; color: var(--text-muted);">Exam Scheduled: ${sub.examDate}</p>
+              <h2 style="font-size: 1.35rem; margin-bottom: 4px;">${escapeHtml(sub.name)}</h2>
+              <span class="mono" style="font-size: 0.8rem; color: var(--text-muted);">
+                Exam Date: ${sub.examDate} · ${pace.daysLeft >= 0 ? `${pace.daysLeft} days remaining` : 'Concluded'}
+              </span>
             </div>
-            <button class="btn btn-secondary btn-sm" onclick="deleteSubject(${idx})" style="color: var(--red);">
-              <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i> Remove
-            </button>
-          </div>
-
-          <div class="grid-2" style="margin-bottom: 16px;">
-            <div style="background: var(--bg); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
-              <span class="mono" style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Days Remaining</span>
-              <div style="font-size: 1.4rem; font-weight: 700; margin-top: 4px;">${pace.daysLeft >= 0 ? pace.daysLeft : 0}</div>
-            </div>
-            <div style="background: var(--bg); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
-              <span class="mono" style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Pace Requirement</span>
-              <div style="font-size: 1.4rem; font-weight: 700; margin-top: 4px; color: ${pace.status === 'urgent' ? 'var(--red)' : 'var(--text-main)'};">
-                ${pace.dailyRate} <span style="font-size: 0.8rem; font-weight: 500;">topics/day</span>
-              </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span class="badge badge-${pace.status}">${pace.statusText}</span>
+              <button class="btn btn-secondary btn-sm" onclick="deleteSubject(${sIdx})" title="Delete Track" style="color: var(--red);">
+                <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+              </button>
             </div>
           </div>
 
-          <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">Detailed Syllabus Checklist</div>
+          <div style="margin-bottom: 16px;">
+            <div class="progress-track" style="margin-bottom: 6px;">
+              <div class="progress-fill" style="width: ${pace.percent}%"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted);" class="mono">
+              <span>${pace.done} / ${pace.total} Mastered</span>
+              <span>Target Velocity: <strong>${pace.dailyRate}</strong> topics / day</span>
+            </div>
+          </div>
+
           <ul class="topic-checklist">
             ${sub.topics.map((t, tIdx) => `
               <li class="topic-item ${t.completed ? 'completed' : ''}">
-                <input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTopic(${idx}, ${tIdx})">
+                <input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTopic(${sIdx}, ${tIdx})">
                 <span style="flex: 1;">${escapeHtml(t.title)}</span>
               </li>
             `).join('')}
@@ -1280,7 +1326,25 @@
       });
     }
 
-    // Subject Mutators
+    function toggleTopic(subIdx, topicIdx) {
+      studentDB.subjects[subIdx].topics[topicIdx].completed = !studentDB.subjects[subIdx].topics[topicIdx].completed;
+      persistUserData();
+      renderSubjectsList();
+      renderPlannerList();
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function deleteSubject(index) {
+      if (confirm(`Remove "${studentDB.subjects[index].name}" and all syllabus milestones?`)) {
+        studentDB.subjects.splice(index, 1);
+        persistUserData();
+        renderSubjectsList();
+        renderPlannerList();
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    // Modal Control
     function openSubjectModal() {
       document.getElementById('form-subject').reset();
       document.getElementById('subject-modal').classList.remove('hidden');
@@ -1294,152 +1358,233 @@
       e.preventDefault();
       const name = document.getElementById('sub-title').value.trim();
       const examDate = document.getElementById('sub-date').value;
-      const rawChapters = document.getElementById('sub-chapters').value.split('\n');
+      const rawChapters = document.getElementById('sub-chapters').value.trim();
+
+      if (!name || !examDate || !rawChapters) return;
 
       const topics = rawChapters
-        .map(ch => ch.trim())
-        .filter(ch => ch.length > 0)
-        .map(ch => ({ title: ch, completed: false }));
-
-      if (topics.length === 0) {
-        alert('Please specify at least one syllabus topic or chapter.');
-        return;
-      }
+        .split('\n')
+        .map(l => l.trim())
+        .filter(l => l.length > 0)
+        .map(title => ({ title, completed: false }));
 
       studentDB.subjects.push({ name, examDate, topics });
       persistUserData();
+
       closeSubjectModal();
       renderSubjectsList();
       renderPlannerList();
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
     }
 
-    function toggleTopic(subIdx, topicIdx) {
-      studentDB.subjects[subIdx].topics[topicIdx].completed = !studentDB.subjects[subIdx].topics[topicIdx].completed;
-      persistUserData();
-      renderSubjectsList();
-      renderPlannerList();
+    // MULTI-FORMAT FILE PARSER (PDF, PPTX, DOCX, TXT, MD)
+    function initDragAndDrop() {
+      const dropZone = document.getElementById('file-drop-zone');
+      ['dragenter', 'dragover'].forEach(name => {
+        dropZone.addEventListener(name, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropZone.classList.add('dragover');
+        });
+      });
+      ['dragleave', 'drop'].forEach(name => {
+        dropZone.addEventListener(name, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropZone.classList.remove('dragover');
+        });
+      });
+      dropZone.addEventListener('drop', (e) => {
+        const files = e.dataTransfer.files;
+        if (files && files.length > 0) {
+          processUniversalFile(files[0]);
+        }
+      });
     }
 
-    function deleteSubject(idx) {
-      if (confirm('Delete this subject and its associated syllabus progression?')) {
-        studentDB.subjects.splice(idx, 1);
-        persistUserData();
-        renderSubjectsList();
-        renderPlannerList();
-        lucide.createIcons();
+    function handleUniversalFileUpload(event) {
+      const file = event.target.files[0];
+      if (file) processUniversalFile(file);
+    }
+
+    async function processUniversalFile(file) {
+      const statusBox = document.getElementById('file-load-status');
+      const statusText = document.getElementById('file-load-text');
+      const titleInput = document.getElementById('summary-doc-title');
+      const textArea = document.getElementById('summary-raw-text');
+
+      statusBox.classList.remove('hidden');
+      statusText.textContent = `Reading ${file.name}...`;
+
+      const ext = file.name.split('.').pop().toLowerCase();
+      titleInput.value = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+
+      try {
+        if (ext === 'txt' || ext === 'md') {
+          const text = await file.text();
+          textArea.value = text;
+          statusBox.classList.add('hidden');
+        } else if (ext === 'pdf') {
+          statusText.textContent = 'Extracting text from PDF pages...';
+          const arrayBuffer = await file.arrayBuffer();
+          const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+          let fullText = '';
+          for (let i = 1; i <= pdfDoc.numPages; i++) {
+            const page = await pdfDoc.getPage(i);
+            const content = await page.getTextContent();
+            const pageText = content.items.map(item => item.str).join(' ');
+            fullText += `\n--- Page ${i} ---\n` + pageText;
+          }
+          textArea.value = fullText.trim();
+          statusBox.classList.add('hidden');
+        } else if (ext === 'docx') {
+          statusText.textContent = 'Extracting Word document paragraphs...';
+          const arrayBuffer = await file.arrayBuffer();
+          const result = await mammoth.extractRawText({ arrayBuffer });
+          textArea.value = result.value.trim();
+          statusBox.classList.add('hidden');
+        } else if (ext === 'pptx') {
+          statusText.textContent = 'Extracting PowerPoint slide decks...';
+          const arrayBuffer = await file.arrayBuffer();
+          const zip = await JSZip.loadAsync(arrayBuffer);
+          let slidesText = '';
+          let slideIndex = 1;
+
+          for (const filename of Object.keys(zip.files)) {
+            if (filename.startsWith('ppt/slides/slide') && filename.endsWith('.xml')) {
+              const xmlContent = await zip.files[filename].async('text');
+              const parser = new DOMParser();
+              const xmlDoc = parser.parseFromString(xmlContent, 'application/xml');
+              const textNodes = xmlDoc.getElementsByTagName('a:t');
+              let slideString = '';
+              for (let i = 0; i < textNodes.length; i++) {
+                slideString += textNodes[i].textContent + ' ';
+              }
+              if (slideString.trim()) {
+                slidesText += `\n[Slide ${slideIndex}]\n` + slideString.trim() + '\n';
+                slideIndex++;
+              }
+            }
+          }
+          textArea.value = slidesText.trim() || 'No text extracted from presentation slides.';
+          statusBox.classList.add('hidden');
+        } else {
+          alert('Unsupported file format. Please upload PDF, DOCX, PPTX, TXT, or MD.');
+          statusBox.classList.add('hidden');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Error extracting file content: ' + err.message);
+        statusBox.classList.add('hidden');
       }
     }
 
-    // Material Synthesizer & Note Summarizer
-    function handleFileUpload(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        document.getElementById('summary-raw-text').value = evt.target.result;
-        if (!document.getElementById('summary-doc-title').value) {
-          document.getElementById('summary-doc-title').value = file.name.replace(/\.[^/.]+$/, "");
-        }
-      };
-      reader.readAsText(file);
+    function clearSynthesizer() {
+      document.getElementById('summary-doc-title').value = '';
+      document.getElementById('summary-raw-text').value = '';
+      document.getElementById('summary-results-pane').classList.add('hidden');
     }
 
+    // Synthesis & Flashcards
     function synthesizeNotes() {
-      const title = document.getElementById('summary-doc-title').value.trim() || 'Academic Reference Material';
+      const title = document.getElementById('summary-doc-title').value.trim() || 'Study Document Synthesis';
       const text = document.getElementById('summary-raw-text').value.trim();
 
-      if (text.length < 40) {
-        alert('Please supply sufficient text or notes to extract meaningful high-yield insights.');
+      if (!text) {
+        alert('Please enter study text or upload a document first.');
         return;
       }
 
-      // Client-side extraction engine for study summaries
-      const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
-      const cleaned = sentences.map(s => s.trim()).filter(s => s.length > 15);
+      const sentences = text
+        .replace(/([.?!])\s+(?=[A-Z0-9])/g, '$1|')
+        .split('|')
+        .map(s => s.trim())
+        .filter(s => s.length > 20 && !s.startsWith('---'));
 
-      // Create an overview summary
-      const execSummary = cleaned.slice(0, Math.min(3, cleaned.length)).join(' ');
+      const execSummary = sentences.slice(0, 3).join(' ') || text.substring(0, 240) + '...';
+      const keyPoints = sentences.slice(2, 8);
 
-      // Extract key concept bullet points
-      const keyPoints = [];
-      const step = Math.max(1, Math.floor(cleaned.length / 5));
-      for (let i = 0; i < cleaned.length && keyPoints.length < 5; i += step) {
-        keyPoints.push(cleaned[i]);
-      }
-
-      // Generate active-recall flashcard pairs
-      const flashcards = [];
-      cleaned.forEach((sent, index) => {
-        if (flashcards.length >= 4) return;
-        const words = sent.split(' ');
-        if (words.length > 7) {
-          const splitPoint = Math.floor(words.length / 2);
-          flashcards.push({
-            front: words.slice(0, splitPoint).join(' ') + '...?',
-            back: words.slice(splitPoint).join(' ')
-          });
+      const cards = keyPoints.map((sentence, idx) => {
+        const parts = sentence.split(/[:—–-]|\bis\b|\bare\b|\brefers to\b/i);
+        if (parts.length > 1 && parts[0].trim().length > 4 && parts[0].trim().length < 60) {
+          return {
+            prompt: `Explain the concept: ${parts[0].trim()}`,
+            answer: sentence.trim()
+          };
         }
+        return {
+          prompt: `Key Fact #${idx + 1} from "${title}"`,
+          answer: sentence.trim()
+        };
       });
 
-      // Render out synthesis
       document.getElementById('out-doc-title').textContent = title;
+      document.getElementById('out-reading-stats').textContent = 
+        `Extracted ~${text.split(/\s+/).length} words · High Yield Study Pack`;
       document.getElementById('out-exec-summary').textContent = execSummary;
 
-      const bulletContainer = document.getElementById('out-bullet-points');
-      bulletContainer.innerHTML = keyPoints.map(pt => `<li>${escapeHtml(pt)}</li>`).join('');
+      const bulletsList = document.getElementById('out-bullet-points');
+      bulletsList.innerHTML = keyPoints.map(pt => `<li>${escapeHtml(pt)}</li>`).join('');
 
-      const fcContainer = document.getElementById('out-flashcards-grid');
-      fcContainer.innerHTML = flashcards.map((fc, i) => `
-        <div class="flashcard" onclick="flipCard(this)">
-          <div class="flashcard-indicator">Active Recall · Card ${i + 1} (Tap to Flip)</div>
-          <div class="fc-front" style="font-weight: 600; font-size: 0.95rem;">${escapeHtml(fc.front)}</div>
-          <div class="fc-back hidden" style="font-size: 0.9rem; color: var(--accent);">${escapeHtml(fc.back)}</div>
+      const cardsGrid = document.getElementById('out-flashcards-grid');
+      cardsGrid.innerHTML = cards.map(c => `
+        <div class="flashcard" onclick="this.classList.toggle('flipped')">
+          <div class="flashcard-inner">
+            <div class="card-face front">
+              <span class="mono" style="font-size: 0.72rem; color: var(--text-faint); margin-bottom: 6px;">QUESTION</span>
+              <strong style="font-size: 0.95rem;">${escapeHtml(c.prompt)}</strong>
+              <span class="mono" style="font-size: 0.72rem; color: var(--accent); margin-top: 10px;">(Click to flip)</span>
+            </div>
+            <div class="card-face back">
+              <span class="mono" style="font-size: 0.72rem; color: var(--accent); margin-bottom: 6px;">ANSWER</span>
+              <p style="font-size: 0.85rem; line-height: 1.5;">${escapeHtml(c.answer)}</p>
+            </div>
+          </div>
         </div>
       `).join('');
 
       document.getElementById('summary-results-pane').classList.remove('hidden');
-      document.getElementById('summary-results-pane').scrollIntoView({ behavior: 'smooth' });
+      if (window.lucide) lucide.createIcons();
     }
 
-    function flipCard(el) {
-      const front = el.querySelector('.fc-front');
-      const back = el.querySelector('.fc-back');
-      front.classList.toggle('hidden');
-      back.classList.toggle('hidden');
+    function exportSummaryAsText() {
+      const title = document.getElementById('out-doc-title').textContent;
+      const summary = document.getElementById('out-exec-summary').textContent;
+      const bullets = Array.from(document.querySelectorAll('#out-bullet-points li')).map(li => `• ${li.textContent}`).join('\n');
+
+      const content = `${title.toUpperCase()}\n\nEXECUTIVE SUMMARY:\n${summary}\n\nHIGH-YIELD TAKEAWAYS:\n${bullets}\n\nGenerated via Kallio Studio`;
+      
+      const blob = new Blob([content], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${title.replace(/\s+/g, '_')}_summary.txt`;
+      a.click();
     }
 
     // Pomodoro Chronometer
-    function setTimerMode(mins) {
-      clearInterval(timerInterval);
+    function setTimerMode(minutes) {
+      if (isTimerActive) clearInterval(timerInterval);
       isTimerActive = false;
-      document.getElementById('timer-toggle-btn').textContent = 'Start Session';
-      timerDuration = mins * 60;
+      timerDuration = minutes * 60;
       timerRemaining = timerDuration;
       updateTimerDisplay();
 
-      document.querySelectorAll('#tab-focus .pill-btn').forEach(btn => btn.classList.remove('active'));
-      if (mins === 25) document.getElementById('timer-mode-deep').classList.add('active');
-      if (mins === 50) document.getElementById('timer-mode-long').classList.add('active');
-      if (mins === 5) document.getElementById('timer-mode-rest').classList.add('active');
-    }
+      document.querySelectorAll('.pill-selector .pill-btn').forEach(btn => btn.classList.remove('active'));
+      if (minutes === 25) document.getElementById('timer-mode-deep').classList.add('active');
+      else if (minutes === 50) document.getElementById('timer-mode-long').classList.add('active');
+      else if (minutes === 5) document.getElementById('timer-mode-rest').classList.add('active');
 
-    function updateTimerDisplay() {
-      const mins = Math.floor(timerRemaining / 60);
-      const secs = timerRemaining % 60;
-      document.getElementById('timer-display').textContent = 
-        `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      document.getElementById('timer-toggle-btn').textContent = 'Start Session';
     }
 
     function toggleTimer() {
       if (isTimerActive) {
         clearInterval(timerInterval);
         isTimerActive = false;
-        document.getElementById('timer-toggle-btn').textContent = 'Resume Session';
+        document.getElementById('timer-toggle-btn').textContent = 'Resume';
       } else {
         isTimerActive = true;
-        document.getElementById('timer-toggle-btn').textContent = 'Pause Session';
+        document.getElementById('timer-toggle-btn').textContent = 'Pause';
         timerInterval = setInterval(() => {
           if (timerRemaining > 0) {
             timerRemaining--;
@@ -1447,8 +1592,8 @@
           } else {
             clearInterval(timerInterval);
             isTimerActive = false;
-            alert('Study interval concluded. Time to rest your mind.');
-            resetTimer();
+            document.getElementById('timer-toggle-btn').textContent = 'Start Session';
+            alert('Timer session complete! Take a deliberate rest.');
           }
         }, 1000);
       }
@@ -1458,20 +1603,27 @@
       clearInterval(timerInterval);
       isTimerActive = false;
       timerRemaining = timerDuration;
-      document.getElementById('timer-toggle-btn').textContent = 'Start Session';
       updateTimerDisplay();
+      document.getElementById('timer-toggle-btn').textContent = 'Start Session';
     }
 
-    // Session Intentions Checklist
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timerRemaining / 60);
+      const seconds = timerRemaining % 60;
+      document.getElementById('timer-display').textContent = 
+        `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
     function addFocusTask() {
       const input = document.getElementById('focus-task-input');
-      const text = input.value.trim();
-      if (!text) return;
+      const val = input.value.trim();
+      if (!val) return;
 
-      studentDB.focusTasks.push({ text, completed: false });
+      studentDB.focusTasks = studentDB.focusTasks || [];
+      studentDB.focusTasks.push({ title: val, completed: false });
       persistUserData();
-      renderFocusTasks();
       input.value = '';
+      renderFocusTasks();
     }
 
     function toggleFocusTask(idx) {
@@ -1481,29 +1633,25 @@
     }
 
     function renderFocusTasks() {
-      const container = document.getElementById('focus-task-list');
+      const list = document.getElementById('focus-task-list');
       const tasks = studentDB.focusTasks || [];
-
-      container.innerHTML = tasks.map((t, idx) => `
-        <li class="topic-item ${t.completed ? 'completed' : ''}">
-          <input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleFocusTask(${idx})">
-          <span style="flex: 1;">${escapeHtml(t.text)}</span>
+      list.innerHTML = tasks.map((task, idx) => `
+        <li class="topic-item ${task.completed ? 'completed' : ''}">
+          <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleFocusTask(${idx})">
+          <span style="flex: 1;">${escapeHtml(task.title)}</span>
         </li>
       `).join('');
     }
 
-    // Sanitizer Utility
     function escapeHtml(str) {
       if (!str) return '';
-      return str.replace(/[&<>"']/g, function(m) {
-        return {
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;',
-          '"': '&quot;',
-          "'": '&#039;'
-        }[m];
-      });
+      return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[tag] || tag));
     }
   </script>
 </body>
