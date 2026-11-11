@@ -1,83 +1,83 @@
-      <!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kallio | Personal Academic Studio</title>
-  
-  <!-- Fonts -->
+  <title>Kallio Studio · Personal Academic Operating System</title>
+
+  <!-- Google Fonts: Instrument Serif, Plus Jakarta Sans, JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- In-browser Parsers: PDF.js, Mammoth.js (Word), JSZip (PowerPoint) -->
+  <!-- In-browser Document Readers: PDF.js, Mammoth.js (Word), JSZip (PowerPoint) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
   <style>
     :root {
-      --bg: #F9F8F6;
+      --bg: #F8F7F4;
       --surface: #FFFFFF;
-      --surface-subtle: #F2F0EB;
-      --border: #E5E2DA;
-      --border-strong: #D3CEBE;
-      
-      --text-main: #24221E;
-      --text-muted: #6B685F;
-      --text-faint: #A09D94;
+      --surface-subtle: #F1EFEA;
+      --border: #E5E1D8;
+      --border-strong: #D1CBC0;
 
-      --accent: #2E4034; /* Deep Forest / Botanical */
-      --accent-hover: #1F2D24;
-      --accent-soft: #EAEFEA;
-      --accent-subtle: #DDE5DC;
-      
+      --text-main: #201E1A;
+      --text-muted: #666259;
+      --text-faint: #9E998E;
+
+      --accent: #2C4233; /* Botanical Deep Evergreen */
+      --accent-hover: #1E2E23;
+      --accent-soft: #E9F0EB;
+      --accent-border: #D1DFD4;
+
       --amber: #B45309;
       --amber-bg: #FEF3C7;
       --red: #991B1B;
       --red-bg: #FEE2E2;
-      --blue: #1E40AF;
-      --blue-bg: #DBEAFE;
       --green: #166534;
       --green-bg: #DCFCE7;
+      --blue: #1E40AF;
+      --blue-bg: #DBEAFE;
 
       --radius-sm: 6px;
       --radius-md: 10px;
       --radius-lg: 14px;
-      --shadow-soft: 0 2px 8px rgba(36, 34, 30, 0.04), 0 1px 2px rgba(36, 34, 30, 0.02);
-      --shadow-float: 0 14px 34px -6px rgba(36, 34, 30, 0.08), 0 4px 12px -2px rgba(36, 34, 30, 0.03);
+      --shadow-soft: 0 2px 10px rgba(32, 30, 26, 0.04), 0 1px 3px rgba(32, 30, 26, 0.02);
+      --shadow-float: 0 16px 36px -6px rgba(32, 30, 26, 0.09), 0 4px 12px -2px rgba(32, 30, 26, 0.04);
     }
 
     [data-theme="dark"] {
-      --bg: #151413;
-      --surface: #1C1B19;
-      --surface-subtle: #252320;
+      --bg: #141312;
+      --surface: #1B1A18;
+      --surface-subtle: #242220;
       --border: #2E2B27;
       --border-strong: #3D3934;
-      
-      --text-main: #ECEAE4;
-      --text-muted: #A39F93;
-      --text-faint: #6A665D;
 
-      --accent: #B2C9B7;
+      --text-main: #EAE7E0;
+      --text-muted: #A39E93;
+      --text-faint: #6E695F;
+
+      --accent: #B0C7B5;
       --accent-hover: #C5D8C9;
-      --accent-soft: #253328;
-      --accent-subtle: #314436;
+      --accent-soft: #243127;
+      --accent-border: #324336;
 
       --amber: #FBBF24;
-      --amber-bg: #352504;
+      --amber-bg: #332305;
       --red: #F87171;
-      --red-bg: #371414;
-      --blue: #60A5FA;
-      --blue-bg: #14233D;
+      --red-bg: #391313;
       --green: #4ADE80;
-      --green-bg: #112F1B;
+      --green-bg: #102B19;
+      --blue: #60A5FA;
+      --blue-bg: #14243E;
 
-      --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.25);
-      --shadow-float: 0 16px 36px rgba(0, 0, 0, 0.45);
+      --shadow-soft: 0 2px 10px rgba(0, 0, 0, 0.25);
+      --shadow-float: 0 18px 40px rgba(0, 0, 0, 0.45);
     }
 
     * {
@@ -88,13 +88,13 @@
     }
 
     body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       background-color: var(--bg);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      transition: background-color 0.25s ease, color 0.25s ease;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
     h1, h2, h3, .serif-heading {
@@ -103,65 +103,74 @@
       letter-spacing: -0.01em;
     }
 
-    input, select, textarea, button {
-      font-family: inherit;
-      color: inherit;
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em;
     }
 
-    /* Utilitarian micro-classes */
     .hidden { display: none !important; }
-    .mono { font-family: 'JetBrains Mono', monospace; font-size: 0.85em; }
 
-    /* AUTH & ONBOARDING CANVAS */
+    /* AUTH & PROFILE CONFIGURATION */
     #auth-view {
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 24px;
-      position: relative;
     }
 
     .auth-card {
       width: 100%;
-      max-width: 450px;
+      max-width: 540px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 36px 32px;
+      padding: 38px 36px;
       box-shadow: var(--shadow-float);
     }
 
-    .auth-brand {
+    .brand-header {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
     }
 
-    .brand-mark {
-      width: 32px;
-      height: 32px;
+    .brand-avatar {
+      width: 40px;
+      height: 40px;
       background: var(--accent);
       color: var(--surface);
       display: grid;
       place-items: center;
       border-radius: var(--radius-sm);
       font-family: 'Instrument Serif', serif;
-      font-size: 1.25rem;
+      font-size: 1.5rem;
     }
 
-    [data-theme="dark"] .brand-mark {
-      color: #151413;
+    [data-theme="dark"] .brand-avatar {
+      color: #141312;
     }
 
     .form-group {
-      margin-bottom: 18px;
+      margin-bottom: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
     }
 
     .form-group label {
       display: block;
-      font-size: 0.8rem;
+      font-size: 0.76rem;
       font-weight: 600;
       color: var(--text-muted);
       text-transform: uppercase;
@@ -171,18 +180,18 @@
 
     .input-field {
       width: 100%;
-      padding: 11px 14px;
+      padding: 10px 14px;
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       color: var(--text-main);
       outline: none;
       transition: border-color 0.15s ease;
     }
 
     .input-field:focus {
-      border-color: var(--text-main);
+      border-color: var(--accent);
     }
 
     .btn {
@@ -202,11 +211,10 @@
     .btn-primary {
       background: var(--accent);
       color: #FFFFFF;
-      width: 100%;
     }
 
     [data-theme="dark"] .btn-primary {
-      color: #151413;
+      color: #141312;
     }
 
     .btn-primary:hover {
@@ -239,7 +247,7 @@
 
     .pill-btn {
       flex: 1;
-      padding: 8px;
+      padding: 8px 12px;
       font-size: 0.85rem;
       font-weight: 600;
       border: none;
@@ -256,24 +264,50 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
 
+    /* UNIVERSITY SEARCHABLE DROPDOWN */
+    .search-select-wrapper {
+      position: relative;
+    }
+    .search-results-list {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      max-height: 200px;
+      overflow-y: auto;
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      margin-top: 4px;
+      z-index: 100;
+      box-shadow: var(--shadow-float);
+    }
+    .search-result-item {
+      padding: 8px 12px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+    }
+    .search-result-item:hover {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
     /* MAIN APP WORKSPACE */
     #app-workspace {
       display: grid;
-      grid-template-columns: 260px 1fr;
+      grid-template-columns: 270px 1fr;
       min-height: 100vh;
     }
 
     @media (max-width: 900px) {
-      #app-workspace {
-        grid-template-columns: 1fr;
-      }
+      #app-workspace { grid-template-columns: 1fr; }
     }
 
-    /* Sidebar Navigation */
     aside.sidebar {
       background: var(--surface);
       border-right: 1px solid var(--border);
-      padding: 24px;
+      padding: 24px 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -282,7 +316,7 @@
       top: 0;
     }
 
-    .user-badge {
+    .user-profile-badge {
       display: flex;
       align-items: center;
       gap: 12px;
@@ -291,16 +325,16 @@
     }
 
     .user-avatar {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       border-radius: var(--radius-sm);
       background: var(--accent-soft);
       color: var(--accent);
       display: grid;
       place-items: center;
       font-weight: 700;
-      font-size: 1rem;
-      border: 1px solid var(--accent-subtle);
+      font-size: 1.1rem;
+      border: 1px solid var(--accent-border);
     }
 
     .nav-menu {
@@ -313,8 +347,8 @@
     .nav-item {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 9px 12px;
+      gap: 12px;
+      padding: 10px 14px;
       color: var(--text-muted);
       text-decoration: none;
       font-size: 0.88rem;
@@ -339,7 +373,6 @@
       font-weight: 600;
     }
 
-    /* Content Area */
     main.main-viewport {
       padding: 36px 48px;
       overflow-y: auto;
@@ -347,32 +380,29 @@
     }
 
     @media (max-width: 768px) {
-      main.main-viewport {
-        padding: 20px;
-      }
+      main.main-viewport { padding: 20px; }
     }
 
     .page-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      margin-bottom: 32px;
+      margin-bottom: 30px;
       padding-bottom: 16px;
       border-bottom: 1px solid var(--border);
     }
 
-    .header-title h1 {
-      font-size: 2.3rem;
+    .page-header h1 {
+      font-size: 2.2rem;
       line-height: 1.1;
       margin-bottom: 4px;
     }
 
-    .header-title p {
-      font-size: 0.95rem;
+    .page-header p {
+      font-size: 0.92rem;
       color: var(--text-muted);
     }
 
-    /* Cards & Containers */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -383,14 +413,13 @@
     }
 
     .card-title {
-      font-size: 1.25rem;
+      font-size: 1.3rem;
       margin-bottom: 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
-    /* Grid Layouts */
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -398,66 +427,20 @@
     }
 
     @media (max-width: 800px) {
-      .grid-2 {
-        grid-template-columns: 1fr;
-      }
+      .grid-2 { grid-template-columns: 1fr; }
     }
 
-    /* Empty Slate Component */
-    .empty-state {
-      text-align: center;
-      padding: 56px 20px;
-      border: 1px dashed var(--border-strong);
-      border-radius: var(--radius-md);
-      background: var(--bg);
-    }
-
-    .empty-state i, .empty-state svg {
-      color: var(--text-faint);
-      margin-bottom: 14px;
-    }
-
-    .empty-state h3 {
-      font-size: 1.4rem;
-      margin-bottom: 6px;
-    }
-
-    .empty-state p {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      max-width: 400px;
-      margin: 0 auto 18px;
-    }
-
-    /* Subject & Exam Schedule Component */
-    .subject-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 20px;
-      margin-bottom: 16px;
-      transition: border-color 0.15s ease;
-    }
-
-    .subject-card:hover {
-      border-color: var(--border-strong);
-    }
-
-    .subject-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 12px;
-    }
-
+    /* BADGES & PROGRESS BARS */
     .badge {
       display: inline-flex;
       align-items: center;
       gap: 4px;
       padding: 3px 8px;
       border-radius: 4px;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
     }
 
     .badge-urgent { background: var(--red-bg); color: var(--red); }
@@ -471,7 +454,7 @@
       background: var(--surface-subtle);
       border-radius: 99px;
       overflow: hidden;
-      margin: 12px 0;
+      margin: 10px 0;
     }
 
     .progress-fill {
@@ -497,7 +480,7 @@
       align-items: center;
       gap: 8px;
       font-size: 0.88rem;
-      padding: 6px 8px;
+      padding: 7px 10px;
       border-radius: 4px;
       background: var(--bg);
       border: 1px solid var(--border);
@@ -506,7 +489,6 @@
     .topic-item.completed span {
       text-decoration: line-through;
       color: var(--text-faint);
-      opacity: 0.75;
     }
 
     .topic-item input[type="checkbox"] {
@@ -516,52 +498,37 @@
       cursor: pointer;
     }
 
-    /* Modal Sheet */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(2px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      padding: 16px;
-    }
-
-    .modal-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      width: 100%;
-      max-width: 520px;
-      padding: 28px;
-      box-shadow: var(--shadow-float);
-      animation: modalSlide 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    @keyframes modalSlide {
-      from { transform: translateY(10px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    /* File Drag & Drop Zone */
+    /* KALLIO AI SYNTHESIZER & DRAG-AND-DROP */
     .drop-zone {
       border: 2px dashed var(--border-strong);
       border-radius: var(--radius-md);
-      padding: 32px 20px;
+      padding: 34px 20px;
       text-align: center;
       cursor: pointer;
       background: var(--surface-subtle);
       transition: all 0.2s ease;
       margin-bottom: 18px;
     }
+
     .drop-zone:hover, .drop-zone.dragover {
       border-color: var(--accent);
       background: var(--accent-soft);
     }
 
-    /* Flashcard 3D Perspective Card */
+    .kallio-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* 3D ACTIVE RECALL FLASHCARDS */
     .flashcard {
       background: var(--surface-subtle);
       border: 1px solid var(--border);
@@ -610,35 +577,57 @@
       font-weight: 500;
     }
 
-    /* Pomodoro Timer */
+    /* FOCUS CHRONOMETER */
     .timer-display {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 3.5rem;
+      font-size: 3.8rem;
       text-align: center;
       margin: 16px 0;
       font-weight: 500;
       letter-spacing: -0.04em;
     }
 
-    /* Utilities */
+    /* MODAL WINDOWS */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(3px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 540px;
+      padding: 28px;
+      box-shadow: var(--shadow-float);
+    }
+
     .action-row {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       justify-content: flex-end;
     }
   </style>
 </head>
 <body>
 
-  <!-- STEP 1 & 2: ONBOARDING / LOGIN VIEW -->
+  <!-- ================= AUTH VIEW ================= -->
   <section id="auth-view">
     <div class="auth-card" id="auth-step-login">
-      <div class="auth-brand">
-        <div class="brand-mark">K</div>
+      <div class="brand-header">
+        <div class="brand-avatar">K</div>
         <div>
-          <h2 style="font-size: 1.4rem;">Kallio Studio</h2>
-          <p style="font-size: 0.8rem; color: var(--text-muted);">Calm, deliberate academic planning</p>
+          <h2 style="font-size: 1.45rem;">Kallio Studio</h2>
+          <p style="font-size: 0.84rem; color: var(--text-muted);">Calm, deliberate academic planning & synthesis</p>
         </div>
       </div>
 
@@ -651,17 +640,19 @@
           <label>Passcode / PIN (Stored Locally)</label>
           <input type="password" id="login-pin" class="input-field" placeholder="••••" maxlength="8" required />
         </div>
-        <button type="submit" class="btn btn-primary">Enter Academic Workspace</button>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+          Access Academic Workspace <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+        </button>
       </form>
     </div>
 
-    <!-- Onboarding: Profile configuration -->
+    <!-- ONBOARDING: PROFILE & INSTITUTION SETUP -->
     <div class="auth-card hidden" id="auth-step-profile">
-      <div class="auth-brand">
-        <div class="brand-mark">K</div>
+      <div class="brand-header">
+        <div class="brand-avatar">K</div>
         <div>
-          <h2 style="font-size: 1.4rem;">Setup Academic Profile</h2>
-          <p style="font-size: 0.8rem; color: var(--text-muted);">Configuring your personalized syllabus pace</p>
+          <h2 style="font-size: 1.45rem;">Setup Student Profile</h2>
+          <p style="font-size: 0.84rem; color: var(--text-muted);">Configure your geographic region and curriculum track</p>
         </div>
       </div>
 
@@ -671,68 +662,122 @@
           <input type="text" id="prof-fullname" class="input-field" placeholder="e.g. Elena Rostova" required />
         </div>
 
-        <div class="form-group">
-          <label>Academic Institution Type</label>
-          <div class="pill-selector">
-            <button type="button" class="pill-btn active" id="btn-type-school" onclick="toggleInstType('school')">School</button>
-            <button type="button" class="pill-btn" id="btn-type-college" onclick="toggleInstType('college')">College / University</button>
-          </div>
-        </div>
-
-        <!-- School Specific Fields -->
-        <div id="school-fields">
+        <div class="form-row">
           <div class="form-group">
-            <label>Current Standard / Grade</label>
-            <select id="prof-standard" class="input-field">
-              <option value="Grade 8">Grade 8</option>
-              <option value="Grade 9">Grade 9</option>
-              <option value="Grade 10 - Matric / Secondary">Grade 10 (Secondary / Board)</option>
-              <option value="Grade 11">Grade 11 (Higher Secondary - Year 1)</option>
-              <option value="Grade 12 - Senior Secondary" selected>Grade 12 (Senior Secondary - Finals)</option>
+            <label>Nationality / Region</label>
+            <select id="prof-nationality" class="input-field" onchange="handleCountryChange(this.value)" required>
+              <option value="India" selected>India</option>
+              <option value="United States">United States</option>
+              <option value="United Kingdom">United Kingdom</option>
+              <option value="Canada">Canada</option>
+              <option value="Australia">Australia</option>
+              <option value="Germany">Germany</option>
+              <option value="Singapore">Singapore</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>State / Province</label>
+            <select id="prof-state" class="input-field" onchange="handleStateChange(this.value)" required>
+              <!-- Populated dynamically -->
             </select>
           </div>
         </div>
 
-        <!-- College Specific Fields -->
-        <div id="college-fields" class="hidden">
-          <div class="form-group">
-            <label>Course / Degree Program</label>
-            <input type="text" id="prof-course" class="input-field" placeholder="e.g. B.Tech Computer Science, MBBS, B.Com" />
-          </div>
-          <div class="form-group">
-            <label>Current Semester / Year</label>
-            <input type="text" id="prof-sem" class="input-field" placeholder="e.g. Semester 5 / Year 3" />
+        <div class="form-group">
+          <label>District / City</label>
+          <select id="prof-district" class="input-field" required>
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Academic Track</label>
+          <div class="pill-selector">
+            <button type="button" class="pill-btn active" id="btn-type-school" onclick="toggleInstType('school')">School (K-12)</button>
+            <button type="button" class="pill-btn" id="btn-type-college" onclick="toggleInstType('college')">College / University</button>
           </div>
         </div>
 
-        <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Complete Setup & Enter Studio</button>
+        <!-- School Flow -->
+        <div id="school-fields">
+          <div class="form-group">
+            <label>Current Grade / Standard</label>
+            <select id="prof-standard" class="input-field">
+              <option value="Grade 8">Grade 8</option>
+              <option value="Grade 9">Grade 9</option>
+              <option value="Grade 10" selected>Grade 10 (Secondary Board)</option>
+              <option value="Grade 11">Grade 11 (Higher Secondary - Year 1)</option>
+              <option value="Grade 12">Grade 12 (Senior Finals)</option>
+            </select>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">
+              * 4 default subjects (<strong>Mathematics</strong>, <strong>Science</strong>, <strong>Social Science</strong>, <strong>English</strong>) will be configured automatically.
+            </p>
+          </div>
+        </div>
+
+        <!-- College Flow -->
+        <div id="college-fields" class="hidden">
+          <div class="form-group">
+            <label>Search or Select University</label>
+            <div class="search-select-wrapper">
+              <input type="text" id="prof-uni-search" class="input-field" placeholder="Search university (e.g. Oxford, Stanford, Anna Univ, IIT...)" oninput="filterUniversities(this.value)" autocomplete="off" />
+              <div id="uni-results-list" class="search-results-list hidden"></div>
+            </div>
+            <input type="hidden" id="prof-uni-selected" value="" />
+          </div>
+
+          <div class="form-row">
+                        <div class="form-group">
+              <label>Degree / Major Program</label>
+              <input type="text" id="prof-course" class="input-field" placeholder="e.g. B.Tech Computer Science, MBBS, B.Com" />
+            </div>
+            <div class="form-group">
+              <label>Year / Semester</label>
+              <select id="prof-year" class="input-field">
+                <option value="Year 1 / Sem 1">Year 1 / Sem 1</option>
+                <option value="Year 1 / Sem 2">Year 1 / Sem 2</option>
+                <option value="Year 2 / Sem 3" selected>Year 2 / Sem 3</option>
+                <option value="Year 2 / Sem 4">Year 2 / Sem 4</option>
+                <option value="Year 3 / Sem 5">Year 3 / Sem 5</option>
+                <option value="Year 3 / Sem 6">Year 3 / Sem 6</option>
+                <option value="Year 4 / Sem 7">Year 4 / Sem 7</option>
+                <option value="Year 4 / Sem 8">Year 4 / Sem 8</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 14px;">
+          Complete Registration & Initialize Plan
+        </button>
       </form>
     </div>
   </section>
 
-  <!-- STEP 3: MAIN AUTHENTICATED WORKSPACE -->
+  <!-- ================= MAIN WORKSPACE ================= -->
   <div id="app-workspace" class="hidden">
     
-    <!-- Sidebar Navigation -->
+    <!-- SIDEBAR -->
     <aside class="sidebar">
       <div>
-        <div class="user-badge">
+        <div class="user-profile-badge">
           <div class="user-avatar" id="nav-avatar">U</div>
           <div style="overflow: hidden;">
-            <div id="nav-fullname" style="font-weight: 600; font-size: 0.92rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">Student</div>
-            <div id="nav-inst-details" class="mono" style="color: var(--text-muted); font-size: 0.72rem;">Academic Plan</div>
+            <div id="nav-fullname" style="font-weight: 600; font-size: 0.94rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">Student</div>
+            <div id="nav-inst-details" class="mono" style="color: var(--text-muted); font-size: 0.72rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">Academic Track</div>
           </div>
         </div>
 
         <nav class="nav-menu">
           <button class="nav-item active" onclick="switchTab('dashboard')">
-            <i data-lucide="layout-grid" style="width: 17px; height: 17px;"></i> Overview
+            <i data-lucide="layout-grid" style="width: 17px; height: 17px;"></i> Overview & Subjects
           </button>
           <button class="nav-item" onclick="switchTab('planner')">
             <i data-lucide="calendar" style="width: 17px; height: 17px;"></i> Exam Timetable & Pace
           </button>
-          <button class="nav-item" onclick="switchTab('summarizer')">
-            <i data-lucide="sparkles" style="width: 17px; height: 17px;"></i> Note Synthesizer
+          <button class="nav-item" onclick="switchTab('synthesizer')">
+            <i data-lucide="sparkles" style="width: 17px; height: 17px;"></i> Kallio AI Synthesizer
           </button>
           <button class="nav-item" onclick="switchTab('focus')">
             <i data-lucide="clock" style="width: 17px; height: 17px;"></i> Focus Chronometer
@@ -740,31 +785,29 @@
         </nav>
       </div>
 
-      <div style="padding-top: 24px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px;">
+      <div style="padding-top: 20px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px;">
         <button class="btn btn-secondary btn-sm" onclick="toggleTheme()" style="justify-content: flex-start; width: 100%;">
-          <i data-lucide="sun-moon" style="width: 15px; height: 15px;"></i> Toggle Theme
+          <i data-lucide="sun-moon" style="width: 15px; height: 15px;"></i> Toggle Dark/Light
         </button>
         <button class="btn btn-secondary btn-sm" onclick="handleLogout()" style="justify-content: flex-start; width: 100%; color: var(--red);">
-          <i data-lucide="log-out" style="width: 15px; height: 15px;"></i> Terminate Session
+          <i data-lucide="log-out" style="width: 15px; height: 15px;"></i> End Session
         </button>
       </div>
     </aside>
 
-    <!-- Main Content Viewport -->
+    <!-- CONTENT VIEWPORT -->
     <main class="main-viewport">
       
       <!-- TAB: DASHBOARD -->
       <section id="tab-dashboard">
         <header class="page-header">
-          <div class="header-title">
-            <h1 id="dash-greeting">Welcome</h1>
-            <p>Here is your current preparation velocity and syllabus progress.</p>
-          </div>
           <div>
-            <button class="btn btn-secondary btn-sm" onclick="openSubjectModal()">
-              <i data-lucide="plus" style="width: 15px; height: 15px;"></i> Add Subject
-            </button>
+            <h1 id="dash-greeting">Welcome, Student</h1>
+            <p id="dash-location-tag">Region: India · Standard Track</p>
           </div>
+          <button class="btn btn-secondary btn-sm" onclick="openSubjectModal()">
+            <i data-lucide="plus" style="width: 15px; height: 15px;"></i> Add Subject
+          </button>
         </header>
 
         <div class="grid-2" style="margin-bottom: 24px;">
@@ -785,22 +828,22 @@
 
         <div class="card">
           <div class="card-title">
-            <h2>Current Subjects</h2>
-            <span class="mono" id="subject-count-tag" style="font-size: 0.8rem; color: var(--text-muted);">0 active</span>
+            <h2>Current Subjects & Topics</h2>
+            <span class="mono" id="subject-count-tag" style="font-size: 0.8rem; color: var(--text-muted);">4 active</span>
           </div>
 
           <div id="subject-list-container">
-            <!-- Dynamically populated -->
+            <!-- Dynamically populated subjects with topics & file upload -->
           </div>
         </div>
       </section>
 
-      <!-- TAB: EXAM PLANNER & VELOCITY -->
+      <!-- TAB: EXAM PLANNER & PACING ENGINE -->
       <section id="tab-planner" class="hidden">
         <header class="page-header">
-          <div class="header-title">
-            <h1>Exam Deadlines & Pacing Velocity</h1>
-            <p>Deterministic calculations based on your days remaining and unstudied topics.</p>
+          <div>
+            <h1>Exam Deadlines & Adaptive Pacing</h1>
+            <p>Calculates required daily velocity based on exact exam date gaps and remaining chapters.</p>
           </div>
           <button class="btn btn-secondary btn-sm" onclick="openSubjectModal()">
             <i data-lucide="plus" style="width: 15px; height: 15px;"></i> New Exam Track
@@ -808,24 +851,24 @@
         </header>
 
         <div id="planner-subject-cards">
-          <!-- Rendered subject pacing cards -->
+          <!-- Rendered subject cards with line-by-line topic pacing -->
         </div>
       </section>
 
-      <!-- TAB: UNIVERSAL NOTE SYNTHESIZER & MULTI-FORMAT FILE PARSER -->
-      <section id="tab-summarizer" class="hidden">
+      <!-- TAB: KALLIO AI MULTI-FORMAT SYNTHESIZER -->
+      <section id="tab-synthesizer" class="hidden">
         <header class="page-header">
-          <div class="header-title">
-            <h1>Study Material Synthesizer</h1>
-            <p>Upload lecture PDFs, PowerPoint slides (.pptx), Word documents (.docx), text files, or paste raw notes to extract high-yield insights and interactive active-recall cards.</p>
+          <div>
+            <h1>Kallio AI Study Synthesizer <span class="kallio-tag">KALLIO AI</span></h1>
+            <p>Upload lecture PDFs, PowerPoint slides (.pptx), Word documents (.docx), or paste raw notes for AI summarization & active recall.</p>
           </div>
         </header>
 
         <div class="card">
           <!-- Multi-format Drag & Drop Upload Zone -->
           <div class="drop-zone" id="file-drop-zone" onclick="document.getElementById('file-uploader').click()">
-            <i data-lucide="file-up" style="width: 32px; height: 32px; color: var(--accent); margin-bottom: 8px;"></i>
-            <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Click or Drag & Drop Study File Here</h3>
+            <i data-lucide="file-up" style="width: 36px; height: 36px; color: var(--accent); margin-bottom: 8px;"></i>
+            <h3 style="font-size: 1.15rem; margin-bottom: 4px;">Click or Drag & Drop Study File Here</h3>
             <p style="font-size: 0.85rem; color: var(--text-muted);">
               Supports <strong>PDF (.pdf)</strong>, <strong>PowerPoint (.pptx)</strong>, <strong>Word (.docx)</strong>, <strong>Markdown (.md)</strong> & <strong>Text (.txt)</strong>
             </p>
@@ -834,23 +877,23 @@
 
           <div id="file-load-status" class="hidden" style="margin-bottom: 16px; padding: 10px 14px; background: var(--accent-soft); border-radius: var(--radius-sm); font-size: 0.85rem; color: var(--accent); display: flex; align-items: center; gap: 8px;">
             <i data-lucide="loader" style="width: 16px; height: 16px;"></i>
-            <span id="file-load-text">Processing document...</span>
+            <span id="file-load-text">Reading document...</span>
           </div>
 
           <div class="form-group">
-            <label>Document Title or Subject Topic</label>
-            <input type="text" id="summary-doc-title" class="input-field" placeholder="e.g. Molecular Genetics & Transcription" />
+            <label>Subject Topic or Document Title</label>
+            <input type="text" id="summary-doc-title" class="input-field" placeholder="e.g. Thermodynamics & Heat Transfer" />
           </div>
 
           <div class="form-group">
-            <label>Extracted or Pasted Material</label>
+            <label>Extracted Material or Pasted Lecture Notes</label>
             <textarea id="summary-raw-text" class="input-field" rows="8" placeholder="Extracted textbook content or pasted notes will appear here..."></textarea>
           </div>
 
           <div class="action-row">
             <button class="btn btn-secondary btn-sm" onclick="clearSynthesizer()">Clear</button>
-            <button class="btn btn-primary" onclick="synthesizeNotes()" style="width: auto;">
-              <i data-lucide="sparkles" style="width: 16px; height: 16px;"></i> Synthesize Key Insights
+            <button class="btn btn-primary" onclick="synthesizeNotesWithKallioAI()" style="width: auto;">
+              <i data-lucide="sparkles" style="width: 16px; height: 16px;"></i> Summarize with Kallio AI
             </button>
           </div>
         </div>
@@ -859,15 +902,15 @@
           <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
               <div>
-                <h2 class="serif-heading" style="font-size: 1.8rem;" id="out-doc-title">Document Summary</h2>
-                <span class="mono" id="out-reading-stats" style="font-size: 0.78rem; color: var(--text-muted);">Extracted text · High retention digest</span>
+                <h2 class="serif-heading" style="font-size: 1.8rem;" id="out-doc-title">Executive Summary</h2>
+                <span class="mono" id="out-reading-stats" style="font-size: 0.78rem; color: var(--text-muted);">Kallio AI High-Retention Digest</span>
               </div>
               <button class="btn btn-secondary btn-sm" onclick="exportSummaryAsText()">
                 <i data-lucide="download" style="width: 14px; height: 14px;"></i> Export Notes (.txt)
               </button>
             </div>
 
-            <div id="out-exec-summary" style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 24px; padding: 14px; background: var(--surface-subtle); border-radius: var(--radius-sm); border-left: 3px solid var(--accent);"></div>
+            <div id="out-exec-summary" style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 24px; padding: 16px; background: var(--surface-subtle); border-radius: var(--radius-sm); border-left: 3px solid var(--accent);"></div>
 
             <h3 style="font-size: 1.25rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
               <i data-lucide="check-circle" style="width: 18px; height: 18px; color: var(--accent);"></i> High-Yield Concept Takeaways
@@ -875,9 +918,9 @@
             <ul id="out-bullet-points" style="padding-left: 20px; line-height: 1.7; font-size: 0.92rem; color: var(--text-main); margin-bottom: 28px;"></ul>
 
             <h3 style="font-size: 1.25rem; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
-              <i data-lucide="layers" style="width: 18px; height: 18px; color: var(--accent);"></i> Active Recall Flashcards
+              <i data-lucide="layers" style="width: 18px; height: 18px; color: var(--accent);"></i> Active Recall Flashcards (Click to Flip)
             </h3>
-            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 16px;">Click any card to flip between Prompt and Key Fact.</p>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 16px;">Test your cognitive recall by flipping between Concept Prompt and Key Answer.</p>
             <div id="out-flashcards-grid" class="grid-2"></div>
           </div>
         </div>
@@ -886,15 +929,15 @@
       <!-- TAB: FOCUS CHRONOMETER -->
       <section id="tab-focus" class="hidden">
         <header class="page-header">
-          <div class="header-title">
+          <div>
             <h1>Focus Chronometer</h1>
-            <p>Deliberate, uninterrupted intervals designed for deep cognitive study.</p>
+            <p>Deliberate intervals engineered for deep cognitive study.</p>
           </div>
         </header>
 
         <div class="grid-2">
           <div class="card" style="text-align: center;">
-            <div class="pill-selector" style="max-width: 300px; margin: 0 auto 16px;">
+            <div class="pill-selector" style="max-width: 320px; margin: 0 auto 16px;">
               <button class="pill-btn active" id="timer-mode-deep" onclick="setTimerMode(25)">25m Deep Work</button>
               <button class="pill-btn" id="timer-mode-long" onclick="setTimerMode(50)">50m Intensive</button>
               <button class="pill-btn" id="timer-mode-rest" onclick="setTimerMode(5)">5m Rest</button>
@@ -909,7 +952,7 @@
           </div>
 
           <div class="card">
-            <h2 style="font-size: 1.2rem; margin-bottom: 12px;">Session Intentions</h2>
+            <h2 style="font-size: 1.2rem; margin-bottom: 12px;">Active Task Intentions</h2>
             <div class="form-group">
               <input type="text" id="focus-task-input" class="input-field" placeholder="What single concept are you conquering right now?" onkeydown="if(event.key==='Enter') addFocusTask()" />
             </div>
@@ -921,11 +964,11 @@
     </main>
   </div>
 
-  <!-- MODAL: ADD SUBJECT & SYLLABUS -->
+  <!-- ================= MODAL: ADD SUBJECT & EXAM PLAN ================= -->
   <div id="subject-modal" class="modal-overlay hidden">
     <div class="modal-box">
       <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px;">
-        <h2 style="font-size: 1.4rem;">Add Subject & Exam Plan</h2>
+        <h2 style="font-size: 1.45rem;">Add Subject & Target Exam</h2>
         <button onclick="closeSubjectModal()" style="background: none; border: none; cursor: pointer; color: var(--text-faint);">
           <i data-lucide="x" style="width: 20px; height: 20px;"></i>
         </button>
@@ -934,7 +977,7 @@
       <form id="form-subject" onsubmit="handleSaveSubject(event)">
         <div class="form-group">
           <label>Subject Name</label>
-          <input type="text" id="sub-title" class="input-field" placeholder="e.g. Organic Chemistry, Macroeconomics, Linear Algebra" required />
+          <input type="text" id="sub-title" class="input-field" placeholder="e.g. Physics, Data Structures, Macroeconomics" required />
         </div>
 
         <div class="form-group">
@@ -944,10 +987,10 @@
 
         <div class="form-group">
           <label>Syllabus Chapters / Topics (One per line)</label>
-          <textarea id="sub-chapters" class="input-field" rows="6" placeholder="Chapter 1: Reaction Mechanisms&#10;Chapter 2: Alkene Reactions&#10;Chapter 3: Stereochemistry&#10;Chapter 4: Aromaticity" required></textarea>
+          <textarea id="sub-chapters" class="input-field" rows="5" placeholder="Chapter 1: Mechanics&#10;Chapter 2: Thermodynamics&#10;Chapter 3: Electromagnetism" required></textarea>
         </div>
 
-        <div class="action-row" style="margin-top: 24px;">
+        <div class="action-row" style="margin-top: 20px;">
           <button type="button" class="btn btn-secondary" onclick="closeSubjectModal()">Cancel</button>
           <button type="submit" class="btn btn-primary" style="width: auto;">Save & Calculate Velocity</button>
         </div>
@@ -955,9 +998,83 @@
     </div>
   </div>
 
-  <!-- LOGIC & APPLICATION STATE -->
+  <!-- ================= MODAL: ADD TOPIC TO SUBJECT ================= -->
+  <div id="topic-modal" class="modal-overlay hidden">
+    <div class="modal-box" style="max-width: 440px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px;">
+        <h2 style="font-size: 1.3rem;">Add Topic to <span id="topic-modal-subname"></span></h2>
+        <button onclick="closeTopicModal()" style="background: none; border: none; cursor: pointer; color: var(--text-faint);">
+          <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+        </button>
+      </div>
+
+      <form id="form-add-topic" onsubmit="handleSaveTopic(event)">
+        <input type="hidden" id="topic-modal-subidx" />
+        <div class="form-group">
+          <label>New Topic or Chapter Title</label>
+          <input type="text" id="topic-new-title" class="input-field" placeholder="e.g. Chemical Bonding and Hybridization" required />
+        </div>
+        <div class="action-row" style="margin-top: 18px;">
+          <button type="button" class="btn btn-secondary" onclick="closeTopicModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="width: auto;">Add Topic</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT SYSTEM ENGINE ================= -->
   <script>
-    // State keys
+    // Region, State, District Directories
+    const REGION_DATA = {
+      "India": {
+        "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem", "Tirunelveli"],
+        "Karnataka": ["Bengaluru", "Mysuru", "Mangaluru", "Hubballi", "Belagavi"],
+        "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik", "Aurangabad"],
+        "Delhi": ["New Delhi", "North Delhi", "South Delhi", "West Delhi", "East Delhi"],
+        "Uttar Pradesh": ["Lucknow", "Noida", "Kanpur", "Varanasi", "Agra"]
+      },
+      "United States": {
+        "California": ["Los Angeles", "San Francisco", "San Diego", "San Jose", "Sacramento"],
+        "New York": ["New York City", "Buffalo", "Rochester", "Albany", "Syracuse"],
+        "Texas": ["Houston", "Austin", "Dallas", "San Antonio", "Fort Worth"],
+        "Massachusetts": ["Boston", "Cambridge", "Worcester", "Springfield"]
+      },
+      "United Kingdom": {
+        "England": ["Greater London", "Manchester", "Birmingham", "Oxford", "Cambridge"],
+        "Scotland": ["Edinburgh", "Glasgow", "Aberdeen", "Dundee"]
+      },
+      "Canada": {
+        "Ontario": ["Toronto", "Ottawa", "Waterloo", "Hamilton"],
+        "British Columbia": ["Vancouver", "Victoria", "Burnaby", "Surrey"]
+      },
+      "Australia": {
+        "New South Wales": ["Sydney", "Newcastle", "Wollongong"],
+        "Victoria": ["Melbourne", "Geelong", "Ballarat"]
+      },
+      "Germany": {
+        "Bavaria": ["Munich", "Nuremberg", "Augsburg"],
+        "Berlin": ["Berlin Mitte", "Charlottenburg", "Pankow"]
+      },
+      "Singapore": {
+        "Central": ["Downtown Core", "Bukit Merah", "Queenstown"],
+        "East": ["Bedok", "Tampines", "Pasir Ris"]
+      }
+    };
+
+    // Global Universities Directory
+    const UNIVERSITIES_DIRECTORY = [
+      "Oxford University", "University of Cambridge", "Harvard University", "Stanford University",
+      "Massachusetts Institute of Technology (MIT)", "California Institute of Technology (Caltech)",
+      "Princeton University", "Yale University", "Imperial College London", "ETH Zurich",
+      "National University of Singapore (NUS)", "Nanyang Technological University (NTU)",
+      "Indian Institute of Technology (IIT) Madras", "Indian Institute of Technology (IIT) Bombay",
+      "Indian Institute of Technology (IIT) Delhi", "Anna University", "University of Delhi",
+      "Jawaharlal Nehru University (JNU)", "University of Toronto", "University of British Columbia",
+      "University of Melbourne", "University of Sydney", "Technical University of Munich",
+      "Heidelberg University", "Columbia University", "University of California, Berkeley"
+    ];
+
+    // Local Storage Keys
     const STORAGE_KEY_AUTH = 'kallio_auth_session';
     const STORAGE_KEY_DATA = 'kallio_academic_db';
     const STORAGE_KEY_THEME = 'kallio_theme';
@@ -978,12 +1095,13 @@
     // Bootstrapping Engine
     window.addEventListener('DOMContentLoaded', () => {
       initTheme();
+      initRegionDropdowns();
       initSession();
       initDragAndDrop();
       if (window.lucide) lucide.createIcons();
     });
 
-    // Theme initialization
+    // Theme Logic
     function initTheme() {
       const savedTheme = localStorage.getItem(STORAGE_KEY_THEME) || 'light';
       document.documentElement.setAttribute('data-theme', savedTheme);
@@ -997,7 +1115,64 @@
       if (window.lucide) lucide.createIcons();
     }
 
-    // Session Management
+    // Region & Dropdowns Engine
+    function initRegionDropdowns() {
+      handleCountryChange("India");
+    }
+
+    function handleCountryChange(country) {
+      const stateSelect = document.getElementById('prof-state');
+      stateSelect.innerHTML = '';
+      const states = Object.keys(REGION_DATA[country] || {});
+      states.forEach(st => {
+        const opt = document.createElement('option');
+        opt.value = st;
+        opt.textContent = st;
+        stateSelect.appendChild(opt);
+      });
+      if (states.length > 0) {
+        handleStateChange(states[0]);
+      }
+    }
+
+        function handleStateChange(state) {
+      const country = document.getElementById('prof-nationality').value;
+      const districtSelect = document.getElementById('prof-district');
+      districtSelect.innerHTML = '';
+      const districts = (REGION_DATA[country] && REGION_DATA[country][state]) || [];
+      districts.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = d;
+        districtSelect.appendChild(opt);
+      });
+    }
+
+    // University Search Filter
+    function filterUniversities(query) {
+      const resultsContainer = document.getElementById('uni-results-list');
+      if (!query.trim()) {
+        resultsContainer.classList.add('hidden');
+        return;
+      }
+      const matches = UNIVERSITIES_DIRECTORY.filter(u => u.toLowerCase().includes(query.toLowerCase()));
+      if (matches.length === 0) {
+        resultsContainer.innerHTML = `<div class="search-result-item" style="color:var(--text-faint);">No university matched. Type full name to register custom.</div>`;
+      } else {
+        resultsContainer.innerHTML = matches.map(m => `
+          <div class="search-result-item" onclick="selectUniversity('${escapeHtml(m)}')">${escapeHtml(m)}</div>
+        `).join('');
+      }
+      resultsContainer.classList.remove('hidden');
+    }
+
+    function selectUniversity(name) {
+      document.getElementById('prof-uni-search').value = name;
+      document.getElementById('prof-uni-selected').value = name;
+      document.getElementById('uni-results-list').classList.add('hidden');
+    }
+
+    // Session Management & Persistence
     function initSession() {
       const session = localStorage.getItem(STORAGE_KEY_AUTH);
       if (session) {
@@ -1057,9 +1232,9 @@
       }
     }
 
-    let institutionType = 'school';
+    let currentInstType = 'school';
     function toggleInstType(type) {
-      institutionType = type;
+      currentInstType = type;
       if (type === 'school') {
         document.getElementById('btn-type-school').classList.add('active');
         document.getElementById('btn-type-college').classList.remove('active');
@@ -1076,22 +1251,90 @@
     function handleProfileSubmit(e) {
       e.preventDefault();
       const fullName = document.getElementById('prof-fullname').value.trim();
+      const nationality = document.getElementById('prof-nationality').value;
+      const state = document.getElementById('prof-state').value;
+      const district = document.getElementById('prof-district').value;
+
       let academicTag = '';
-      if (institutionType === 'school') {
-        academicTag = document.getElementById('prof-standard').value;
+      if (currentInstType === 'school') {
+        academicTag = `${document.getElementById('prof-standard').value} · School`;
       } else {
-        const course = document.getElementById('prof-course').value.trim() || 'Degree Course';
-        const sem = document.getElementById('prof-sem').value.trim() || 'Active Term';
-        academicTag = `${course} · ${sem}`;
+        const uni = document.getElementById('prof-uni-search').value.trim() || 'University Degree';
+        const course = document.getElementById('prof-course').value.trim() || 'Major Course';
+        const year = document.getElementById('prof-year').value;
+        academicTag = `${uni} · ${course} (${year})`;
       }
 
-      studentDB.profile = { name: fullName, instType: institutionType, tag: academicTag };
+      studentDB.profile = {
+        name: fullName,
+        nationality,
+        state,
+        district,
+        instType: currentInstType,
+        tag: academicTag
+      };
+
+      // DEFAULT SCHOOL SUBJECTS INITIALIZATION:
+      // If student is School track and subjects are empty, inject Mathematics, Science, Social Science, English
+      if (currentInstType === 'school' && (!studentDB.subjects || studentDB.subjects.length === 0)) {
+        const defaultDate = new Date();
+        defaultDate.setDate(defaultDate.getDate() + 30);
+        const defaultDateStr = defaultDate.toISOString().split('T')[0];
+
+        studentDB.subjects = [
+          {
+            name: "Mathematics",
+            examDate: defaultDateStr,
+            topics: [
+              { title: "Real Numbers & Polynomials", completed: false },
+              { title: "Linear Equations in Two Variables", completed: false },
+              { title: "Quadratic Equations", completed: false },
+              { title: "Triangles & Coordinate Geometry", completed: false }
+            ],
+            files: []
+          },
+          {
+            name: "Science",
+            examDate: defaultDateStr,
+            topics: [
+              { title: "Chemical Reactions & Equations", completed: false },
+              { title: "Acids, Bases, and Salts", completed: false },
+              { title: "Life Processes & Nutrition", completed: false },
+              { title: "Light: Reflection & Refraction", completed: false }
+            ],
+            files: []
+          },
+          {
+            name: "Social Science",
+            examDate: defaultDateStr,
+            topics: [
+              { title: "The Rise of Nationalism in Europe", completed: false },
+              { title: "Resources and Development", completed: false },
+              { title: "Power Sharing and Federalism", completed: false },
+              { title: "Sectors of the Indian Economy", completed: false }
+            ],
+            files: []
+          },
+          {
+            name: "English",
+            examDate: defaultDateStr,
+            topics: [
+              { title: "Reading Comprehension & Critical Analysis", completed: false },
+              { title: "Formal Letter & Article Writing", completed: false },
+              { title: "Grammar: Tenses, Modals & Concord", completed: false },
+              { title: "Literature: Core Prose & Poetic Devices", completed: false }
+            ],
+            files: []
+          }
+        ];
+      }
+
       persistUserData();
       renderWorkspace();
     }
 
     function handleLogout() {
-      if (confirm('Terminate and exit current session?')) {
+      if (confirm('End this study session on this device?')) {
         localStorage.removeItem(STORAGE_KEY_AUTH);
         currentSession = null;
         document.getElementById('form-login').reset();
@@ -1099,16 +1342,17 @@
       }
     }
 
-    // Workspace Navigation
+    // Workspace & Views
     function renderWorkspace() {
       document.getElementById('auth-view').classList.add('hidden');
       document.getElementById('app-workspace').classList.remove('hidden');
 
-      const prof = studentDB.profile || { name: 'Student', tag: 'Academic Track' };
+      const prof = studentDB.profile || { name: 'Student', tag: 'Academic Track', nationality: 'Global', district: 'City' };
       document.getElementById('nav-fullname').textContent = prof.name;
       document.getElementById('nav-inst-details').textContent = prof.tag;
       document.getElementById('nav-avatar').textContent = prof.name.charAt(0).toUpperCase();
       document.getElementById('dash-greeting').textContent = `Welcome, ${prof.name.split(' ')[0]}`;
+      document.getElementById('dash-location-tag').textContent = `${prof.district}, ${prof.state}, ${prof.nationality} · ${prof.tag}`;
 
       renderSubjectsList();
       renderPlannerList();
@@ -1117,7 +1361,7 @@
     }
 
     function switchTab(tabId) {
-      ['dashboard', 'planner', 'summarizer', 'focus'].forEach(t => {
+      ['dashboard', 'planner', 'synthesizer', 'focus'].forEach(t => {
         document.getElementById(`tab-${t}`).classList.add('hidden');
       });
       document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
@@ -1129,7 +1373,7 @@
       if (window.lucide) lucide.createIcons();
     }
 
-    // Exam Pacing Math
+    // ADAPTIVE EXAM PACING ENGINE
     function computePace(examDateStr, topics) {
       const today = new Date();
       today.setHours(0,0,0,0);
@@ -1159,11 +1403,11 @@
         statusText = 'Prepared';
       } else {
         dailyRate = (pending / daysLeft).toFixed(1);
-        if (daysLeft <= 7 && pending > 3) {
+        if (daysLeft <= 7 && pending > 2) {
           status = 'urgent';
-          statusText = `${dailyRate} topics / day (Urgent)`;
+          statusText = `${dailyRate} chapters / day (Urgent)`;
         } else {
-          statusText = `${dailyRate} topics / day`;
+          statusText = `${dailyRate} chapters / day`;
         }
       }
 
@@ -1171,7 +1415,7 @@
       return { daysLeft, total, done, pending, dailyRate, status, statusText, percent };
     }
 
-    // Subject & Planner Rendering
+    // SUBJECT RENDERING & TOPIC INTERACTION
     function renderSubjectsList() {
       const container = document.getElementById('subject-list-container');
       const countTag = document.getElementById('subject-count-tag');
@@ -1184,10 +1428,8 @@
 
       if (subjects.length === 0) {
         container.innerHTML = `
-          <div class="empty-state">
-            <i data-lucide="book-open" style="width: 32px; height: 32px;"></i>
-            <h3>No Academic Subjects Yet</h3>
-            <p>Add your first subject along with its exam date and syllabus to initialize your pacing calendar.</p>
+          <div style="text-align: center; padding: 48px 20px; border: 1px dashed var(--border); border-radius: var(--radius-md);">
+            <p style="color: var(--text-muted); margin-bottom: 12px;">No subjects registered yet.</p>
             <button class="btn btn-secondary btn-sm" onclick="openSubjectModal()">
               <i data-lucide="plus" style="width: 14px; height: 14px;"></i> Register First Subject
             </button>
@@ -1204,7 +1446,7 @@
       let nearestExam = null;
 
       container.innerHTML = '';
-      subjects.forEach((sub, idx) => {
+      subjects.forEach((sub, sIdx) => {
         const pace = computePace(sub.examDate, sub.topics);
         totalChapters += pace.total;
         completedChapters += pace.done;
@@ -1216,30 +1458,46 @@
         }
 
         const card = document.createElement('div');
-        card.className = 'subject-card';
+        card.className = 'card';
+        card.style.marginBottom = '20px';
         card.innerHTML = `
-          <div class="subject-header">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
             <div>
               <h3 style="font-size: 1.25rem; font-weight: 600;">${escapeHtml(sub.name)}</h3>
               <span class="mono" style="font-size: 0.78rem; color: var(--text-muted);">
-                Exam: ${sub.examDate} · ${pace.daysLeft >= 0 ? `${pace.daysLeft} days remaining` : 'Concluded'}
+                Exam Date: ${sub.examDate} · ${pace.daysLeft >= 0 ? `${pace.daysLeft} days left` : 'Completed'}
               </span>
             </div>
-            <span class="badge badge-${pace.status}">${pace.statusText}</span>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span class="badge badge-${pace.status}">${pace.statusText}</span>
+              <button class="btn btn-secondary btn-sm" onclick="openAddTopicModal(${sIdx})" title="Add Chapter / Topic">
+                <i data-lucide="plus" style="width: 13px; height: 13px;"></i> Add Topic
+              </button>
+              <label class="btn btn-secondary btn-sm" style="cursor: pointer;" title="Attach study material">
+                <i data-lucide="paperclip" style="width: 13px; height: 13px;"></i> Attach File
+                <input type="file" style="display: none;" onchange="handleSubjectFileUpload(event, ${sIdx})">
+              </label>
+            </div>
           </div>
 
           <div class="progress-track">
             <div class="progress-fill" style="width: ${pace.percent}%"></div>
           </div>
           <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted);" class="mono">
-            <span>${pace.done} of ${pace.total} completed</span>
+            <span>${pace.done} of ${pace.total} topics completed</span>
             <span>${pace.percent}%</span>
           </div>
+
+          ${sub.files && sub.files.length > 0 ? `
+            <div style="margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap;">
+              ${sub.files.map(f => `<span class="kallio-tag" style="font-size: 0.72rem;"><i data-lucide="file" style="width: 12px; height: 12px;"></i> ${escapeHtml(f.name)}</span>`).join('')}
+            </div>
+          ` : ''}
 
           <ul class="topic-checklist">
             ${sub.topics.map((t, tIdx) => `
               <li class="topic-item ${t.completed ? 'completed' : ''}">
-                <input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTopic(${idx}, ${tIdx})">
+                <input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTopic(${sIdx}, ${tIdx})">
                 <span style="flex: 1;">${escapeHtml(t.title)}</span>
               </li>
             `).join('')}
@@ -1292,7 +1550,7 @@
             <div>
               <h2 style="font-size: 1.35rem; margin-bottom: 4px;">${escapeHtml(sub.name)}</h2>
               <span class="mono" style="font-size: 0.8rem; color: var(--text-muted);">
-                Exam Date: ${sub.examDate} · ${pace.daysLeft >= 0 ? `${pace.daysLeft} days remaining` : 'Concluded'}
+                Target Exam: ${sub.examDate} · ${pace.daysLeft >= 0 ? `${pace.daysLeft} days remaining` : 'Concluded'}
               </span>
             </div>
             <div style="display: flex; gap: 8px; align-items: center;">
@@ -1309,7 +1567,7 @@
             </div>
             <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted);" class="mono">
               <span>${pace.done} / ${pace.total} Mastered</span>
-              <span>Target Velocity: <strong>${pace.dailyRate}</strong> topics / day</span>
+              <span>Target Velocity: <strong>${pace.dailyRate}</strong> chapters / day</span>
             </div>
           </div>
 
@@ -1335,7 +1593,7 @@
     }
 
     function deleteSubject(index) {
-      if (confirm(`Remove "${studentDB.subjects[index].name}" and all syllabus milestones?`)) {
+      if (confirm(`Remove subject "${studentDB.subjects[index].name}" and all syllabus milestones?`)) {
         studentDB.subjects.splice(index, 1);
         persistUserData();
         renderSubjectsList();
@@ -1344,7 +1602,18 @@
       }
     }
 
-    // Modal Control
+    function handleSubjectFileUpload(event, subIdx) {
+      const file = event.target.files[0];
+      if (!file) return;
+      studentDB.subjects[subIdx].files = studentDB.subjects[subIdx].files || [];
+      studentDB.subjects[subIdx].files.push({ name: file.name, uploadedAt: new Date().toLocaleDateString() });
+            persistUserData();
+      renderSubjectsList();
+      if (window.lucide) lucide.createIcons();
+      alert(`File "${file.name}" attached to ${studentDB.subjects[subIdx].name}.`);
+    }
+
+    // Modal Control: Add Subject
     function openSubjectModal() {
       document.getElementById('form-subject').reset();
       document.getElementById('subject-modal').classList.remove('hidden');
@@ -1368,7 +1637,7 @@
         .filter(l => l.length > 0)
         .map(title => ({ title, completed: false }));
 
-      studentDB.subjects.push({ name, examDate, topics });
+      studentDB.subjects.push({ name, examDate, topics, files: [] });
       persistUserData();
 
       closeSubjectModal();
@@ -1377,7 +1646,33 @@
       if (window.lucide) lucide.createIcons();
     }
 
-    // MULTI-FORMAT FILE PARSER (PDF, PPTX, DOCX, TXT, MD)
+    // Modal Control: Add Topic
+    function openAddTopicModal(subIdx) {
+      document.getElementById('form-add-topic').reset();
+      document.getElementById('topic-modal-subidx').value = subIdx;
+      document.getElementById('topic-modal-subname').textContent = studentDB.subjects[subIdx].name;
+      document.getElementById('topic-modal').classList.remove('hidden');
+    }
+
+    function closeTopicModal() {
+      document.getElementById('topic-modal').classList.add('hidden');
+    }
+
+    function handleSaveTopic(e) {
+      e.preventDefault();
+      const subIdx = parseInt(document.getElementById('topic-modal-subidx').value, 10);
+      const title = document.getElementById('topic-new-title').value.trim();
+      if (!title || isNaN(subIdx)) return;
+
+      studentDB.subjects[subIdx].topics.push({ title, completed: false });
+      persistUserData();
+      closeTopicModal();
+      renderSubjectsList();
+      renderPlannerList();
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // KALLIO AI MULTI-FORMAT FILE PARSER
     function initDragAndDrop() {
       const dropZone = document.getElementById('file-drop-zone');
       ['dragenter', 'dragover'].forEach(name => {
@@ -1425,7 +1720,7 @@
           textArea.value = text;
           statusBox.classList.add('hidden');
         } else if (ext === 'pdf') {
-          statusText.textContent = 'Extracting text from PDF pages...';
+          statusText.textContent = 'Kallio AI is extracting PDF pages...';
           const arrayBuffer = await file.arrayBuffer();
           const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
           let fullText = '';
@@ -1438,13 +1733,13 @@
           textArea.value = fullText.trim();
           statusBox.classList.add('hidden');
         } else if (ext === 'docx') {
-          statusText.textContent = 'Extracting Word document paragraphs...';
+          statusText.textContent = 'Kallio AI is converting Word doc...';
           const arrayBuffer = await file.arrayBuffer();
           const result = await mammoth.extractRawText({ arrayBuffer });
           textArea.value = result.value.trim();
           statusBox.classList.add('hidden');
         } else if (ext === 'pptx') {
-          statusText.textContent = 'Extracting PowerPoint slide decks...';
+          statusText.textContent = 'Kallio AI is extracting PowerPoint presentation slides...';
           const arrayBuffer = await file.arrayBuffer();
           const zip = await JSZip.loadAsync(arrayBuffer);
           let slidesText = '';
@@ -1485,8 +1780,8 @@
       document.getElementById('summary-results-pane').classList.add('hidden');
     }
 
-    // Synthesis & Flashcards
-    function synthesizeNotes() {
+    // KALLIO AI SYNTHESIS & FLASHCARDS
+    function synthesizeNotesWithKallioAI() {
       const title = document.getElementById('summary-doc-title').value.trim() || 'Study Document Synthesis';
       const text = document.getElementById('summary-raw-text').value.trim();
 
@@ -1513,14 +1808,14 @@
           };
         }
         return {
-          prompt: `Key Fact #${idx + 1} from "${title}"`,
+          prompt: `Key Fact #${idx + 1} (${title})`,
           answer: sentence.trim()
         };
       });
 
       document.getElementById('out-doc-title').textContent = title;
       document.getElementById('out-reading-stats').textContent = 
-        `Extracted ~${text.split(/\s+/).length} words · High Yield Study Pack`;
+        `Kallio AI Extracted ~${text.split(/\s+/).length} words · High Retention Study Pack`;
       document.getElementById('out-exec-summary').textContent = execSummary;
 
       const bulletsList = document.getElementById('out-bullet-points');
@@ -1533,10 +1828,10 @@
             <div class="card-face front">
               <span class="mono" style="font-size: 0.72rem; color: var(--text-faint); margin-bottom: 6px;">QUESTION</span>
               <strong style="font-size: 0.95rem;">${escapeHtml(c.prompt)}</strong>
-              <span class="mono" style="font-size: 0.72rem; color: var(--accent); margin-top: 10px;">(Click to flip)</span>
+              <span class="mono" style="font-size: 0.72rem; color: var(--accent); margin-top: 10px;">(Click to flip card)</span>
             </div>
             <div class="card-face back">
-              <span class="mono" style="font-size: 0.72rem; color: var(--accent); margin-bottom: 6px;">ANSWER</span>
+              <span class="mono" style="font-size: 0.72rem; color: var(--accent); margin-bottom: 6px;">KALLIO AI ANSWER</span>
               <p style="font-size: 0.85rem; line-height: 1.5;">${escapeHtml(c.answer)}</p>
             </div>
           </div>
@@ -1552,7 +1847,7 @@
       const summary = document.getElementById('out-exec-summary').textContent;
       const bullets = Array.from(document.querySelectorAll('#out-bullet-points li')).map(li => `• ${li.textContent}`).join('\n');
 
-      const content = `${title.toUpperCase()}\n\nEXECUTIVE SUMMARY:\n${summary}\n\nHIGH-YIELD TAKEAWAYS:\n${bullets}\n\nGenerated via Kallio Studio`;
+      const content = `${title.toUpperCase()}\n\nEXECUTIVE SUMMARY (KALLIO AI):\n${summary}\n\nHIGH-YIELD TAKEAWAYS:\n${bullets}\n\nGenerated via Kallio Studio Academic OS`;
       
       const blob = new Blob([content], { type: 'text/plain' });
       const a = document.createElement('a');
@@ -1561,7 +1856,7 @@
       a.click();
     }
 
-    // Pomodoro Chronometer
+    // FOCUS CHRONOMETER
     function setTimerMode(minutes) {
       if (isTimerActive) clearInterval(timerInterval);
       isTimerActive = false;
